@@ -2,19 +2,35 @@ import entities.*;
 
 public class Main {
     public static void main(String[] args) {
-        Rectangle rectangle = new Rectangle(5, 10);
-        System.out.println(rectangle.calculateArea());
+//        Rectangle rectangle = new Rectangle(5, 10);
+//        System.out.println(rectangle.calculateArea());
+//
+//        Square square = new Square(5);
+//        System.out.println(square.calculateArea());
+//
+//        Triangle triangle = new Triangle(5, 10);
+//        System.out.println(triangle.calculateArea());
+//
+//        Ellipse ellipse = new Ellipse(5, 10);
+//        System.out.println(ellipse.calculateArea());
+//
+//        Circle circle = new Circle(5);
+//        System.out.println(circle.calculateArea());
 
-        Square square = new Square(5);
-        System.out.println(square.calculateArea());
+        boolean isWhereClause = false;
 
-        Triangle triangle = new Triangle(5, 10);
-        System.out.println(triangle.calculateArea());
+        StringBuilder sb = new StringBuilder();
 
-        Ellipse ellipse = new Ellipse(5, 10);
-        System.out.println(ellipse.calculateArea());
+        if (someBooleanFunc()) {
+            isWhereClause = true;
+        }
 
-        Circle circle = new Circle(5);
-        System.out.println(circle.calculateArea());
+        StringBuilder stringBuilder = isWhereClause ? sb.append("yo") : sb.append("oy");
+
+        System.out.println(sb.toString());
+    }
+
+    private static boolean someBooleanFunc() {
+        return true;
     }
 }
