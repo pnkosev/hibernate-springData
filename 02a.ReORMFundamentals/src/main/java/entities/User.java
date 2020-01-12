@@ -9,28 +9,30 @@ import java.sql.Date;
 @Entity
 public class User {
     @Id
-    private int id;
+    private Integer id;
     @Column
     private String username;
     @Column
     private String password;
     @Column
-    private int age;
+    private Integer age;
     @Column
-    private Date registration_date;
+    private Date registrationDate;
 
-    public User(String username, String password, int age, Date registration_date) {
+    public User() { }
+
+    public User(String username, String password, Integer age, Date registrationDate) {
         this.username = username;
         this.password = password;
         this.age = age;
-        this.registration_date = registration_date;
+        this.registrationDate = registrationDate;
     }
 
-    public int getId() {
+    public Integer getId() {
         return this.id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -50,19 +52,19 @@ public class User {
         this.password = password;
     }
 
-    public int getAge() {
+    public Integer getAge() {
         return this.age;
     }
 
-    public void setAge(int age) {
+    public void setAge(Integer age) {
         this.age = age;
     }
 
     public Date getRegistrationDate() {
-        return this.registration_date;
+        return this.registrationDate;
     }
 
-    public void setRegistrationDate(Date registration_date) {
-        this.registration_date = registration_date;
+    public void setRegistrationDate(Date registrationDate) {
+        this.registrationDate = registrationDate;
     }
 }

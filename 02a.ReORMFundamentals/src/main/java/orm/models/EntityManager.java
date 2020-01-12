@@ -4,15 +4,23 @@ import orm.annotations.Column;
 import orm.annotations.Id;
 import orm.interfaces.DbContext;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.sql.Date;
+import java.util.List;
 import java.util.stream.IntStream;
 
 public class EntityManager<E> implements DbContext<E> {
     private static final String INSERT_QUERY = "INSERT INTO %s (%s) VALUES (%s)";
     private static final String UPDATE_QUERY = "UPDATE %s SET %s WHERE %s";
+    private static final String SELECT_ALL_WITH_WHERE = "SELECT * FROM %s WHERE %s";
 
     private Connection connection;
 
@@ -26,13 +34,128 @@ public class EntityManager<E> implements DbContext<E> {
         Object value = primary.get(entity);
 
         if (value == null || (int) value <= 0) {
-            return this.doInsert(entity, primary);
+            return this.doInsert(entity);
         }
 
         return this.doUpdate(entity, primary);
     }
 
-    private boolean doInsert(E entity, Field primary) throws SQLException {
+    public Iterable<E> find(Class<E> table) throws SQLException, IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
+        return this.find(table, null);
+    }
+
+    public Iterable<E> find(Class<E> table, String where) throws SQLException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+        String tableName = table.getSimpleName().concat("s");
+        String query = String.format(SELECT_ALL_WITH_WHERE,
+                tableName,
+                where != null ? where : "1 = 1");
+
+        Statement statement = this.connection.createStatement();
+        ResultSet resultSet = statement.executeQuery(query);
+
+        List<E> result = new ArrayList<>();
+        while (resultSet.next()) {
+            E current = this.mapResultToEntity(resultSet, table);
+            result.add(current);
+        }
+
+        return result;
+    }
+
+    public E findFirst(Class<E> table) throws SQLException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+        return findFirst(table, null);
+    }
+
+    public E findFirst(Class<E> table, String where) throws SQLException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
+        return this.find(table, where != null ? where : "1 = 1" + " LIMIT 1").iterator().next();
+    }
+
+    private E mapResultToEntity(ResultSet resultSet, Class<E> table) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException, SQLException {
+        E entity = table.getDeclaredConstructor().newInstance();
+
+        Arrays.stream(table.getDeclaredFields())
+                .forEach(f -> {
+                    f.setAccessible(true);
+                    String name = getNormalizedName(f.getName());
+                    Object value = null;
+
+                    try {
+                        value = this.getFieldValueFromResultSet(resultSet, name, f.getType());
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
+
+                    try {
+                        f.set(entity, value);
+                    } catch (IllegalAccessException e) {
+                        e.printStackTrace();
+                    }
+                });
+
+
+//        IF WE WANT TO INSTANTIATE THE ENTITY WITH PARAMETERS AND DELETE THE EMPTY CONSTRUCTOR
+//        Field[] field = new Field[1];
+//
+//        Object[] args = Arrays.stream(table.getDeclaredFields())
+//                .filter(f -> {
+//                    if (f.isAnnotationPresent(Id.class)) {
+//                        field[0] = f;
+//                    }
+//                    return !f.isAnnotationPresent(Id.class);
+//                })
+//                .map(f -> {
+//                    f.setAccessible(true);
+//                    String name = getNormalizedName(f.getName());
+//                    Object value = null;
+//
+//                    try {
+//                        value = this.getFieldValueFromResultSet(resultSet, name, f.getType());
+//                    } catch (SQLException e) {
+//                        e.printStackTrace();
+//                    }
+//                    return value;
+//                })
+//                .toArray();
+//
+//        Class[] arguments = new Class[args.length];
+//        for (int i = 0; i < arguments.length; i++) {
+//            arguments[i] = args[i].getClass();
+//        }
+//
+//        Constructor<E> constructor = table.getDeclaredConstructor(arguments);
+//        E entity = constructor.newInstance(args);
+//
+//        if (field[0] != null) {
+//            Field primary = field[0];
+//            primary.setAccessible(true);
+//            Object value = this.getFieldValueFromResultSet(resultSet, primary.getName(), primary.getType());
+//            primary.set(entity, value);
+//        }
+
+        return entity;
+    }
+
+    private Object getFieldValueFromResultSet(ResultSet resultSet, String name, Class<?> type) throws SQLException {
+        Object result = null;
+
+        if (type == int.class || type == Integer.class) {
+            result = resultSet.getInt(name);
+        } else if (type == double.class || type == Double.class) {
+            result = resultSet.getDouble(name);
+        } else if (type == long.class || type == Long.class) {
+            result = resultSet.getLong(name);
+        } else if (type == boolean.class || type == Boolean.class) {
+            result = resultSet.getBoolean(name);
+        } else if (type == Date.class) {
+            result = resultSet.getDate(name);
+        } else if (type == String.class) {
+            result = resultSet.getString(name);
+        }
+
+        return result;
+    }
+
+    private boolean doInsert(E entity) throws SQLException {
         String tableName = entity.getClass().getSimpleName().toLowerCase().concat("s");
 
         String[] tableFields = getTableFields(entity);
@@ -56,6 +179,12 @@ public class EntityManager<E> implements DbContext<E> {
                 .mapToObj(i -> "`" + tableFields[i] + "`=" + tableValues[i])
                 .toArray(String[]::new);
 
+//        same as the above - IntStream.range
+//        String[] tableFieldValuePairs = new String[tableFields.length];
+//        for (int i = 0; i < tableFields.length; i++) {
+//            tableFieldValuePairs[i] = "`" + tableFields[i] + "`=" + tableValues[i];
+//        }
+
         String whereId = "`" + primary.getName() + "`='" + primary.get(entity) + "'";
 
         String query = String.format(UPDATE_QUERY,
@@ -71,7 +200,7 @@ public class EntityManager<E> implements DbContext<E> {
                 .filter(f -> f.isAnnotationPresent(Column.class))
                 .map(f -> {
                     f.setAccessible(true);
-                    return f.getName();
+                    return getNormalizedName(f.getName());
                 })
                 .toArray(String[]::new);
     }
@@ -92,20 +221,10 @@ public class EntityManager<E> implements DbContext<E> {
                 .toArray(String[]::new);
     }
 
-    public Iterable<E> find(Class<E> table) {
-        return null;
-    }
-
-    public Iterable<E> find(Class<E> table, String where) {
-        return null;
-    }
-
-    public E findFirst(Class<E> table) {
-        return null;
-    }
-
-    public E findFirst(Class<E> table, String where) {
-        return null;
+    private String getNormalizedName(String name) {
+        name = name.replaceAll("([A-Z])", "_$1").toLowerCase();
+        name = name.replaceAll("([0-9])", "_$1");
+        return name;
     }
 
     private Field getId(Class entity) {
