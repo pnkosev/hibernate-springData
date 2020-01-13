@@ -1,10 +1,10 @@
 package orm.models;
 
 import orm.annotations.Column;
+import orm.annotations.Entity;
 import orm.annotations.Id;
 import orm.interfaces.DbContext;
 
-import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
@@ -45,7 +45,8 @@ public class EntityManager<E> implements DbContext<E> {
     }
 
     public Iterable<E> find(Class<E> table, String where) throws SQLException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        String tableName = table.getSimpleName().concat("s");
+        String tableName = table.getAnnotation(Entity.class).name();
+//        String tableName = table.getSimpleName().toLowerCase().concat("s"); // w/o using annotations
         String query = String.format(SELECT_ALL_WITH_WHERE,
                 tableName,
                 where != null ? where : "1 = 1");
@@ -76,7 +77,8 @@ public class EntityManager<E> implements DbContext<E> {
         Arrays.stream(table.getDeclaredFields())
                 .forEach(f -> {
                     f.setAccessible(true);
-                    String name = getNormalizedName(f.getName());
+                    String name = f.getAnnotation(Column.class).name();
+//                    String name = getNormalizedName(f.getName()); // w/o using annotations
                     Object value = null;
 
                     try {
@@ -170,7 +172,8 @@ public class EntityManager<E> implements DbContext<E> {
     }
 
     private boolean doUpdate(E entity, Field primary) throws IllegalAccessException, SQLException {
-        String tableName = entity.getClass().getSimpleName().toLowerCase().concat("s");
+        String tableName = entity.getClass().getAnnotation(Entity.class).name();
+//        String tableName = entity.getClass().getSimpleName().toLowerCase().concat("s"); // w/o using annotations
 
         String[] tableFields = getTableFields(entity);
         String[] tableValues = getTableValues(entity);
@@ -197,17 +200,18 @@ public class EntityManager<E> implements DbContext<E> {
 
     private String[] getTableFields(E entity) {
         return Arrays.stream(entity.getClass().getDeclaredFields())
-                .filter(f -> f.isAnnotationPresent(Column.class))
+                .filter(f -> f.isAnnotationPresent(Column.class) && !f.isAnnotationPresent(Id.class))
                 .map(f -> {
                     f.setAccessible(true);
-                    return getNormalizedName(f.getName());
+                    return f.getAnnotation(Column.class).name();
+//                    return getNormalizedName(f.getName()); // w/o using annotations
                 })
                 .toArray(String[]::new);
     }
 
     private String[] getTableValues(E entity) {
         return Arrays.stream(entity.getClass().getDeclaredFields())
-                .filter(f -> f.isAnnotationPresent(Column.class))
+                .filter(f -> f.isAnnotationPresent(Column.class) && !f.isAnnotationPresent(Id.class))
                 .map(f -> {
                     f.setAccessible(true);
                     try {
@@ -221,11 +225,12 @@ public class EntityManager<E> implements DbContext<E> {
                 .toArray(String[]::new);
     }
 
-    private String getNormalizedName(String name) {
-        name = name.replaceAll("([A-Z])", "_$1").toLowerCase();
-        name = name.replaceAll("([0-9])", "_$1");
-        return name;
-    }
+//    To use if no annotations
+//    private String getNormalizedName(String name) {
+//        name = name.replaceAll("([A-Z])", "_$1").toLowerCase();
+//        name = name.replaceAll("([0-9])", "_$1");
+//        return name;
+//    }
 
     private Field getId(Class entity) {
         return Arrays.stream(entity.getDeclaredFields())

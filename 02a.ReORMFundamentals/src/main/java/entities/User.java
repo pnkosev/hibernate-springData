@@ -6,17 +6,18 @@ import orm.annotations.Id;
 
 import java.sql.Date;
 
-@Entity
+@Entity(name = "users")
 public class User {
     @Id
+    @Column(name = "id")
     private Integer id;
-    @Column
+    @Column(name = "username")
     private String username;
-    @Column
+    @Column(name = "password")
     private String password;
-    @Column
+    @Column(name = "age")
     private Integer age;
-    @Column
+    @Column(name = "registration_date")
     private Date registrationDate;
 
     public User() { }
