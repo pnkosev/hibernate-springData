@@ -21,6 +21,7 @@ public class EntityManager<E> implements DbContext<E> {
     private static final String INSERT_QUERY = "INSERT INTO %s (%s) VALUES (%s)";
     private static final String UPDATE_QUERY = "UPDATE %s SET %s WHERE %s";
     private static final String SELECT_ALL_WITH_WHERE = "SELECT * FROM %s WHERE %s";
+    private static final String DELETE_FROM_TABLE_WITH_WHERE = "DELETE FROM %s WHERE %s";
 
     private Connection connection;
 
@@ -69,6 +70,22 @@ public class EntityManager<E> implements DbContext<E> {
 
     public E findFirst(Class<E> table, String where) throws SQLException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
         return this.find(table, where != null ? where : "1 = 1" + " LIMIT 1").iterator().next();
+    }
+
+    @Override
+    public boolean delete(Class<E> table) throws SQLException {
+        return this.delete(table, null);
+    }
+
+    @Override
+    public boolean delete(Class<E> table, String where) throws SQLException {
+        String tableName = table.getAnnotation(Entity.class).name();
+
+        String query = String.format(DELETE_FROM_TABLE_WITH_WHERE,
+                tableName,
+                where);
+
+        return connection.prepareStatement(query).execute();
     }
 
     private E mapResultToEntity(ResultSet resultSet, Class<E> table) throws NoSuchMethodException, IllegalAccessException, InvocationTargetException, InstantiationException, SQLException {

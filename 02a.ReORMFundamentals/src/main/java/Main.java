@@ -5,8 +5,6 @@ import orm.models.EntityManager;
 import java.lang.reflect.InvocationTargetException;
 import java.sql.Date;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class Main {
     public static void main(String[] args) throws SQLException, IllegalAccessException, SQLException, NoSuchMethodException, InvocationTargetException, InstantiationException {
@@ -17,7 +15,7 @@ public class Main {
         User user = new User("MM", "123", 123, Date.valueOf("1988-02-17"));
 
 //        user.setId(4);
-        userManager.persist(user);
+//        userManager.persist(user);
 
 //        User first = userManager.findFirst(User.class, "id = 1");
 //        System.out.println(first.getUsername() + " is user since " + first.getRegistrationDate());
@@ -31,5 +29,7 @@ public class Main {
 //                u.getUsername(),
 //                u.getAge(),
 //                u.getRegistrationDate())));
+
+        userManager.delete(User.class, "id = 3");
     }
 }
