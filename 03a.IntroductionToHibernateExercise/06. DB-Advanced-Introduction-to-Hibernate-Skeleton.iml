@@ -6,9 +6,16 @@
         <setting name="validation-enabled" value="true" />
         <datasource-mapping>
           <factory-entry name="PersistenceUnit" />
+          <factory-entry name="soft_uni" value="6e7cbf0b-88e4-4be6-a9be-417e297e9edf" />
         </datasource-mapping>
         <naming-strategy-map />
         <deploymentDescriptor name="persistence.xml" url="file://$MODULE_DIR$/src/main/resources/META-INF/persistence.xml" />
+      </configuration>
+    </facet>
+    <facet type="hibernate" name="Hibernate">
+      <configuration>
+        <datasource-map />
+        <naming-strategy-map />
       </configuration>
     </facet>
   </component>
