@@ -30,6 +30,6 @@ public class Main {
 //                u.getAge(),
 //                u.getRegistrationDate())));
 
-        userManager.delete(User.class, "id = 3");
+        userManager.find(User.class, "id = 4");
     }
 }

@@ -100,6 +100,7 @@ public class EntityManager<E> implements DbContext<E> {
 
                     try {
                         value = this.getFieldValueFromResultSet(resultSet, name, f.getType());
+                        System.out.println();
                     } catch (SQLException e) {
                         e.printStackTrace();
                     }
