@@ -94,7 +94,7 @@ public class Book extends BaseEntity {
         this.author = author;
     }
 
-    @ManyToMany(targetEntity = Category.class)
+    @ManyToMany(targetEntity = Category.class, fetch = FetchType.EAGER)
     @JoinTable(
             name = "books_categories",
             joinColumns = @JoinColumn(name = "book_id", referencedColumnName = "id"),

@@ -17,11 +17,12 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
 public class BookServiceImpl implements BookService {
-    private final String BOOK_TXT_PATH = "C:\\Users\\user\\Desktop\\Projects\\Java\\Hibernate\\05a.SpringDataIntroExercise\\src\\main\\resources\\files\\books.txt";
+    private final String BOOK_TXT_PATH = "src\\main\\resources\\files\\books.txt";
 
     private final FileUtil fileUtil;
     private final BookRepository bookRepository;
@@ -81,6 +82,34 @@ public class BookServiceImpl implements BookService {
 
             this.bookRepository.saveAndFlush(book);
         }
+    }
+
+    @Override
+    public Set<String> getAllWithReleaseDateBefore(Date date) {
+        return this.bookRepository.getAllByReleaseDateBefore(date)
+                .stream()
+                .map(Book::getTitle)
+                .collect(Collectors.toSet());
+    }
+
+    @Override
+    public Set<String> getAllWithReleaseDateAfter(Date date) {
+        return this.bookRepository.getAllByReleaseDateAfter(date)
+                .stream()
+                .map(Book::getTitle)
+                .collect(Collectors.toSet());
+    }
+
+    @Override
+    public Set<String> getAllByGivenAuthorOrdered(String firstName, String lastName) {
+        return this.bookRepository
+                .getAllByAuthorFirstNameAndAuthorLastNameOrderByReleaseDateAscTitleAsc(firstName, lastName)
+                .stream()
+                .map(b -> String.format("%s was released on %s, copies sold- %d",
+                        b.getTitle(),
+                        b.getReleaseDate().toString(),
+                        b.getCopies()))
+                .collect(Collectors.toSet());
     }
 
     private Author getRandomAuthor() {

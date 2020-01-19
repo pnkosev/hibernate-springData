@@ -8,11 +8,14 @@ import pn.springdataintroexercise.repository.AuthorRepository;
 import pn.springdataintroexercise.utils.FileUtil;
 
 import java.io.IOException;
+import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
 public class AuthorServiceImpl implements AuthorService {
-    private final String AUTHOR_TXT_PATH = "C:\\Users\\user\\Desktop\\Projects\\Java\\Hibernate\\05a.SpringDataIntroExercise\\src\\main\\resources\\files\\authors.txt";
+    private final String AUTHOR_TXT_PATH = "src\\main\\resources\\files\\authors.txt";
 
     private final FileUtil fileUtil;
     private final AuthorRepository authorRepository;
@@ -31,7 +34,7 @@ public class AuthorServiceImpl implements AuthorService {
 
         String[] lines = this.fileUtil.readFile(AUTHOR_TXT_PATH);
 
-        for (String line: lines) {
+        for (String line : lines) {
             String[] input = line.split("\\s+");
             String firstName = input[0];
             String lastName = input[1];
@@ -42,5 +45,33 @@ public class AuthorServiceImpl implements AuthorService {
 
             this.authorRepository.save(author);
         }
+    }
+
+    @Override
+    public List<String> getAllWithBooksReleasedBeforeDate(Date date) {
+        return this.authorRepository.findAuthorsWithBooksReleasedBeforeDate(date)
+                .stream()
+                .map(a -> String.format("%s %s",
+                        a.get("firstName"),
+                        a.get("lastName")))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<String> getAllByBookCountDesc() {
+        return this.authorRepository.findAuthorsByOrderByBooksDesc()
+                .stream()
+                .map(author -> String.format("%s %s - %d books",
+                        author.getFirstName(), author.getLastName(), author.getBooks().size()))
+                .collect(Collectors.toList());
+
+        // Solution with local sort of all authors
+/*        return this.authorRepository
+                .findAll()
+                .stream()
+                .sorted((a1, a2) -> Integer.compare(a2.getBooks().size(), a1.getBooks().size()))
+                .map(author -> String.format("%s %s - %d books",
+                        author.getFirstName(), author.getLastName(), author.getBooks().size()))
+                .collect(Collectors.toList());*/
     }
 }

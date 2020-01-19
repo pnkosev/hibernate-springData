@@ -12,7 +12,7 @@ import java.io.IOException;
 @Service
 @Transactional
 public class CategoryServiceImpl implements CategoryService {
-    private final String CATEGORY_TXT_PATH = "C:\\Users\\user\\Desktop\\Projects\\Java\\Hibernate\\05a.SpringDataIntroExercise\\src\\main\\resources\\files\\categories.txt";
+    private final String CATEGORY_TXT_PATH = "src\\main\\resources\\files\\categories.txt";
 
     private final FileUtil fileUtil;
     private final CategoryRepository categoryRepository;
