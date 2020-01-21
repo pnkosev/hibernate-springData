@@ -66,6 +66,7 @@ public class Book extends BaseEntity {
         this.releaseDate = releaseDate;
     }
 
+    @Enumerated(EnumType.ORDINAL)
     @Column(name = "edition_type")
     public EditionType getEditionType() {
         return this.editionType;
@@ -75,6 +76,7 @@ public class Book extends BaseEntity {
         this.editionType = editionType;
     }
 
+    @Enumerated(EnumType.ORDINAL)
     @Column(name = "age_restriction")
     public AgeRestriction getAgeRestriction() {
         return this.ageRestriction;
