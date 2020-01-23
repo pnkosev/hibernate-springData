@@ -9,9 +9,9 @@
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>pn</groupId>
-    <artifactId>advance-dquerying-exercises</artifactId>
+    <artifactId>advanced-querying-exercises</artifactId>
     <version>1.0.0-SNAPSHOT</version>
-    <name>advance-dquerying-exercises</name>
+    <name>advanced-querying-exercises</name>
     <description>Spring Data Advanced Querying Exercises</description>
 
     <properties>

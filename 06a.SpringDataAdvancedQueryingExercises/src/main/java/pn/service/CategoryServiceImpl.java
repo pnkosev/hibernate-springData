@@ -11,29 +11,29 @@ import java.io.IOException;
 @Service
 public class CategoryServiceImpl implements CategoryService {
 
-  private final static String CATEGORIES_FILE_PATH = "src/main/resources/files/categories.txt";
+    private final static String CATEGORIES_FILE_PATH = "src/main/resources/files/categories.txt";
 
-  private final CategoryRepository categoryRepository;
-  private final FileUtil fileUtil;
+    private final CategoryRepository categoryRepository;
+    private final FileUtil fileUtil;
 
-  @Autowired
-  public CategoryServiceImpl(CategoryRepository categoryRepository, FileUtil fileUtil) {
-    this.categoryRepository = categoryRepository;
-    this.fileUtil = fileUtil;
-  }
-
-  @Override
-  public void seedCategories() throws IOException {
-    if (this.categoryRepository.count() != 0) {
-      return;
+    @Autowired
+    public CategoryServiceImpl(CategoryRepository categoryRepository, FileUtil fileUtil) {
+        this.categoryRepository = categoryRepository;
+        this.fileUtil = fileUtil;
     }
 
-    String[] categoriesFileContent = this.fileUtil.getFileContent(CATEGORIES_FILE_PATH);
-    for (String line : categoriesFileContent) {
-      Category category = new Category();
-      category.setName(line);
+    @Override
+    public void seedCategories() throws IOException {
+        if (this.categoryRepository.count() != 0) {
+            return;
+        }
 
-      this.categoryRepository.saveAndFlush(category);
+        String[] categoriesFileContent = this.fileUtil.getFileContent(CATEGORIES_FILE_PATH);
+        for (String line : categoriesFileContent) {
+            Category category = new Category();
+            category.setName(line);
+
+            this.categoryRepository.saveAndFlush(category);
+        }
     }
-  }
 }

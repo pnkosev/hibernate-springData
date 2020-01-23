@@ -8,17 +8,17 @@ import javax.persistence.Table;
 @Table(name = "categories")
 public class Category extends BaseEntity {
 
-  private String name;
+    private String name;
 
-  public Category() {
-  }
+    public Category() {
+    }
 
-  @Column(name = "name", nullable = false)
-  public String getName() {
-    return name;
-  }
+    @Column(name = "name", nullable = false)
+    public String getName() {
+        return name;
+    }
 
-  public void setName(String name) {
-    this.name = name;
-  }
+    public void setName(String name) {
+        this.name = name;
+    }
 }

@@ -1,5 +1,6 @@
 package pn.service;
 
+import pn.domain.dto.ReducedBook;
 import pn.domain.entities.*;
 import pn.repository.AuthorRepository;
 import pn.repository.BookRepository;
@@ -23,202 +24,220 @@ import java.util.stream.Collectors;
 @Transactional
 public class BookServiceImpl implements BookService {
 
-  private final static String BOOKS_FILE_PATH = "src/main/resources/files/books.txt";
+    private final static String BOOKS_FILE_PATH = "src/main/resources/files/books.txt";
 
-  private final BookRepository bookRepository;
-  private final AuthorRepository authorRepository;
-  private final CategoryRepository categoryRepository;
-  private final FileUtil fileUtil;
+    private final BookRepository bookRepository;
+    private final AuthorRepository authorRepository;
+    private final CategoryRepository categoryRepository;
+    private final FileUtil fileUtil;
 
-  @Autowired
-  public BookServiceImpl(BookRepository bookRepository, AuthorRepository authorRepository, CategoryRepository categoryRepository, FileUtil fileUtil) {
-    this.bookRepository = bookRepository;
-    this.authorRepository = authorRepository;
-    this.categoryRepository = categoryRepository;
-    this.fileUtil = fileUtil;
-  }
-
-  @Override
-  public void seedBooks() throws IOException {
-    if (this.bookRepository.count() != 0) {
-      return;
+    @Autowired
+    public BookServiceImpl(BookRepository bookRepository, AuthorRepository authorRepository, CategoryRepository categoryRepository, FileUtil fileUtil) {
+        this.bookRepository = bookRepository;
+        this.authorRepository = authorRepository;
+        this.categoryRepository = categoryRepository;
+        this.fileUtil = fileUtil;
     }
 
-    String[] booksFileContent = this.fileUtil.getFileContent(BOOKS_FILE_PATH);
-    for (String line : booksFileContent) {
-      String[] lineParams = line.split("\\s+");
+    @Override
+    public void seedBooks() throws IOException {
+        if (this.bookRepository.count() != 0) {
+            return;
+        }
 
-      Book book = new Book();
-      book.setAuthor(this.getRandomAuthor());
+        String[] booksFileContent = this.fileUtil.getFileContent(BOOKS_FILE_PATH);
+        for (String line : booksFileContent) {
+            String[] lineParams = line.split("\\s+");
 
-      EditionType editionType = EditionType.values()[Integer.parseInt(lineParams[0])];
-      book.setEditionType(editionType);
+            Book book = new Book();
+            book.setAuthor(this.getRandomAuthor());
 
-      LocalDate releaseDate = LocalDate.parse(lineParams[1], DateTimeFormatter.ofPattern("d/M/yyyy"));
-      book.setReleaseDate(releaseDate);
+            EditionType editionType = EditionType.values()[Integer.parseInt(lineParams[0])];
+            book.setEditionType(editionType);
 
-      int copies = Integer.parseInt(lineParams[2]);
-      book.setCopies(copies);
+            LocalDate releaseDate = LocalDate.parse(lineParams[1], DateTimeFormatter.ofPattern("d/M/yyyy"));
+            book.setReleaseDate(releaseDate);
 
-      BigDecimal price = new BigDecimal(lineParams[3]);
-      book.setPrice(price);
+            int copies = Integer.parseInt(lineParams[2]);
+            book.setCopies(copies);
 
-      AgeRestriction ageRestriction = AgeRestriction.values()[Integer.parseInt(lineParams[4])];
-      book.setAgeRestriction(ageRestriction);
+            BigDecimal price = new BigDecimal(lineParams[3]);
+            book.setPrice(price);
 
-      StringBuilder title = new StringBuilder();
-      for (int i = 5; i < lineParams.length; i++) {
-        title.append(lineParams[i]).append(" ");
-      }
+            AgeRestriction ageRestriction = AgeRestriction.values()[Integer.parseInt(lineParams[4])];
+            book.setAgeRestriction(ageRestriction);
 
-      book.setTitle(title.toString().trim());
+            StringBuilder title = new StringBuilder();
+            for (int i = 5; i < lineParams.length; i++) {
+                title.append(lineParams[i]).append(" ");
+            }
 
-      Set<Category> categories = this.getRandomCategories();
-      book.setCategories(categories);
+            book.setTitle(title.toString().trim());
 
-      this.bookRepository.saveAndFlush(book);
-    }
-  }
+            Set<Category> categories = this.getRandomCategories();
+            book.setCategories(categories);
 
-  @Override
-  public List<String> getAllBooksTitlesAfter() {
-    List<Book> books = this.bookRepository.findAllByReleaseDateAfter(LocalDate.parse("2000-12-31"));
-
-    return books.stream().map(b -> b.getTitle()).collect(Collectors.toList());
-  }
-
-  @Override
-  public Set<String> getAllAuthorsWithBookBefore() {
-    List<Book> books = this.bookRepository.findAllByReleaseDateBefore(LocalDate.parse("1990-01-01"));
-
-    return books.stream().map(b -> String.format("%s %s", b.getAuthor().getFirstName(), b.getAuthor().getLastName())).collect(Collectors.toSet());
-  }
-
-  @Override
-  public List<String> getAllByAgeRestriction(AgeRestriction ageRestriction) {
-    return this.bookRepository
-            .findAllByAgeRestrictionIs(ageRestriction)
-            .stream()
-            .map(Book::getTitle)
-            .collect(Collectors.toList());
-  }
-
-  @Override
-  public List<String> getAllGoldenWithLessThan5000Copies() {
-    return this.bookRepository
-            .findAllByEditionTypeAndCopiesLessThan(EditionType.GOLD, 5000)
-            .stream()
-            .map(Book::getTitle)
-            .collect(Collectors.toList());
-  }
-
-  @Override
-  public List<String> getAllWithPriceBetween5And40Desc() {
-    return this.bookRepository
-            .findAllByPriceBetweenOrderByPriceDesc(BigDecimal.valueOf(5), BigDecimal.valueOf(40))
-            .stream()
-            .map(b -> String.format("%s - $%.2f",
-                    b.getTitle(),
-                    b.getPrice()))
-            .collect(Collectors.toList());
-  }
-
-  @Override
-  public List<String> getAllWithPriceLessThan5AndGreaterThan40() {
-    return this.bookRepository
-            .findAllByPriceLessThanOrPriceGreaterThan(BigDecimal.valueOf(5), BigDecimal.valueOf(40))
-            .stream()
-            .map(b -> String.format("%s - $%.2f",
-                    b.getTitle(),
-                    b.getPrice()))
-            .collect(Collectors.toList());
-  }
-
-  @Override
-  public List<String> getAllNotReleasedInGivenYear(int year) {
-    return this.bookRepository
-            .findAllNotReleasedInGivenYear(year)
-            .stream()
-            .map(Book::getTitle)
-            .collect(Collectors.toList());
-  }
-
-  @Override
-  public List<String> getAllBeforeGivenDate(LocalDate date) {
-    return this.bookRepository
-            .findAllByReleaseDateBefore(date)
-            .stream()
-            .map(b -> String.format("%s %s %.2f",
-                    b.getTitle(),
-                    b.getEditionType().name(),
-                    b.getPrice()))
-            .collect(Collectors.toList());
-  }
-
-  @Override
-  public List<String> getAllByAuthorFirstNameEndingWith(String end) {
-    return this.bookRepository
-            .findAllByAuthorFirstNameEndingWith(end)
-            .stream()
-            .map(Book::getTitle)
-            .collect(Collectors.toList());
-  }
-
-  @Override
-  public List<String> getAllWithTitleContaining(String str) {
-    return this.bookRepository
-            .findAllByTitleContaining(str)
-            .stream()
-            .map(Book::getTitle)
-            .collect(Collectors.toList());
-  }
-
-  @Override
-  public List<String> getAllWithAuthorLastNameStartingWith(String start) {
-    return this.bookRepository
-            .findAllByAuthorLastNameStartsWith(start)
-            .stream()
-            .map(b -> String.format("%s (%s %s)",
-                    b.getTitle(),
-                    b.getAuthor().getFirstName(),
-                    b.getAuthor().getLastName()))
-            .collect(Collectors.toList());
-  }
-
-  @Override
-  public int getCountOfAllWithGivenTitleLength(int length) {
-    return this.bookRepository
-            .countAllWithTitleLengthGreaterThan(length);
-  }
-
-  private Author getRandomAuthor() {
-    Random random = new Random();
-
-    int randomId = random.nextInt((int) (this.authorRepository.count() - 1)) + 1;
-
-    return this.authorRepository.findById(randomId).orElse(null);
-  }
-
-  private Set<Category> getRandomCategories() {
-    Set<Category> categories = new LinkedHashSet<>();
-
-    Random random = new Random();
-    int length = random.nextInt(5);
-
-    for (int i = 0; i < length; i++) {
-      Category category = this.getRandomCategory();
-
-      categories.add(category);
+            this.bookRepository.saveAndFlush(book);
+        }
     }
 
-    return categories;
-  }
+    @Override
+    public List<String> getAllBooksTitlesAfter() {
+        List<Book> books = this.bookRepository.findAllByReleaseDateAfter(LocalDate.parse("2000-12-31"));
 
-  private Category getRandomCategory() {
-    Random random = new Random();
+        return books.stream().map(b -> b.getTitle()).collect(Collectors.toList());
+    }
 
-    int randomId = random.nextInt((int) (this.categoryRepository.count() - 1)) + 1;
+    @Override
+    public Set<String> getAllAuthorsWithBookBefore() {
+        List<Book> books = this.bookRepository.findAllByReleaseDateBefore(LocalDate.parse("1990-01-01"));
 
-    return this.categoryRepository.findById(randomId).orElse(null);
-  }
+        return books.stream().map(b -> String.format("%s %s", b.getAuthor().getFirstName(), b.getAuthor().getLastName())).collect(Collectors.toSet());
+    }
+
+    @Override
+    public List<String> getAllByAgeRestriction(AgeRestriction ageRestriction) {
+        return this.bookRepository
+                .findAllByAgeRestrictionIs(ageRestriction)
+                .stream()
+                .map(Book::getTitle)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<String> getAllGoldenWithLessThan5000Copies() {
+        return this.bookRepository
+                .findAllByEditionTypeAndCopiesLessThan(EditionType.GOLD, 5000)
+                .stream()
+                .map(Book::getTitle)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<String> getAllWithPriceBetween5And40Desc() {
+        return this.bookRepository
+                .findAllByPriceBetweenOrderByPriceDesc(BigDecimal.valueOf(5), BigDecimal.valueOf(40))
+                .stream()
+                .map(b -> String.format("%s - $%.2f",
+                        b.getTitle(),
+                        b.getPrice()))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<String> getAllWithPriceLessThan5AndGreaterThan40() {
+        return this.bookRepository
+                .findAllByPriceLessThanOrPriceGreaterThan(BigDecimal.valueOf(5), BigDecimal.valueOf(40))
+                .stream()
+                .map(b -> String.format("%s - $%.2f",
+                        b.getTitle(),
+                        b.getPrice()))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<String> getAllNotReleasedInGivenYear(int year) {
+        return this.bookRepository
+                .findAllNotReleasedInGivenYear(year)
+                .stream()
+                .map(Book::getTitle)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<String> getAllBeforeGivenDate(LocalDate date) {
+        return this.bookRepository
+                .findAllByReleaseDateBefore(date)
+                .stream()
+                .map(b -> String.format("%s %s %.2f",
+                        b.getTitle(),
+                        b.getEditionType().name(),
+                        b.getPrice()))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<String> getAllByAuthorFirstNameEndingWith(String end) {
+        return this.bookRepository
+                .findAllByAuthorFirstNameEndingWith(end)
+                .stream()
+                .map(Book::getTitle)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<String> getAllWithTitleContaining(String str) {
+        return this.bookRepository
+                .findAllByTitleContaining(str)
+                .stream()
+                .map(Book::getTitle)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<String> getAllWithAuthorLastNameStartingWith(String start) {
+        return this.bookRepository
+                .findAllByAuthorLastNameStartsWith(start)
+                .stream()
+                .map(b -> String.format("%s (%s %s)",
+                        b.getTitle(),
+                        b.getAuthor().getFirstName(),
+                        b.getAuthor().getLastName()))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public int getCountOfAllWithGivenTitleLength(int length) {
+        return this.bookRepository
+                .countAllWithTitleLengthGreaterThan(length);
+    }
+
+    @Override
+    public String getReducedBookByTitle(String title) {
+        ReducedBook reducedBook = this.bookRepository.findBookByTitle(title);
+        return (reducedBook == null) ? "Book Not Found" : reducedBook.toString();
+    }
+
+    @Override
+    public int increaseNumberOfBooksWithReleasedDateAfter(int qty, LocalDate date) {
+        return this.bookRepository
+                .increaseCopiesOfBooksReleasedAfterDate(qty, date);
+    }
+
+    @Override
+    public int deleteAllWithCopiesCountLowerThan(int bound) {
+        return this.bookRepository
+                .deleteAllByCopiesLessThanCustom(bound);
+    }
+
+    private Author getRandomAuthor() {
+        Random random = new Random();
+
+        int randomId = random.nextInt((int) (this.authorRepository.count() - 1)) + 1;
+
+        return this.authorRepository.findById(randomId).orElse(null);
+    }
+
+    private Set<Category> getRandomCategories() {
+        Set<Category> categories = new LinkedHashSet<>();
+
+        Random random = new Random();
+        int length = random.nextInt(5);
+
+        for (int i = 0; i < length; i++) {
+            Category category = this.getRandomCategory();
+
+            categories.add(category);
+        }
+
+        return categories;
+    }
+
+    private Category getRandomCategory() {
+        Random random = new Random();
+
+        int randomId = random.nextInt((int) (this.categoryRepository.count() - 1)) + 1;
+
+        return this.categoryRepository.findById(randomId).orElse(null);
+    }
 }

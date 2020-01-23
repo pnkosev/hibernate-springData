@@ -17,74 +17,94 @@ import java.time.format.DateTimeFormatter;
 @Controller
 public class BookshopController implements CommandLineRunner {
 
-  private final AuthorService authorService;
-  private final CategoryService categoryService;
-  private final BookService bookService;
+    private final AuthorService authorService;
+    private final CategoryService categoryService;
+    private final BookService bookService;
 
-  @Autowired
-  public BookshopController(AuthorService authorService, CategoryService categoryService, BookService bookService) {
-    this.authorService = authorService;
-    this.categoryService = categoryService;
-    this.bookService = bookService;
-  }
+    @Autowired
+    public BookshopController(AuthorService authorService, CategoryService categoryService, BookService bookService) {
+        this.authorService = authorService;
+        this.categoryService = categoryService;
+        this.bookService = bookService;
+    }
 
-  @Override
-  public void run(String... strings) throws Exception {
-    this.authorService.seedAuthors();
-    this.categoryService.seedCategories();
-    this.bookService.seedBooks();
+    @Override
+    public void run(String... strings) throws Exception {
+        this.authorService.seedAuthors();
+        this.categoryService.seedCategories();
+        this.bookService.seedBooks();
 
-
-    // 1. Books Titles by Age Restriction
+        // 1. Books Titles by Age Restriction
 //        this.bookService
 //                .getAllByAgeRestriction(AgeRestriction.valueOf("TEEN"))
 //                .forEach(System.out::println);
 
-    // 2. Golden Books
+        // 2. Golden Books
 //        this.bookService
 //                .getAllGoldenWithLessThan5000Copies()
 //                .forEach(System.out::println);
 
-    // 3. Books by Price
+        // 3. Books by Price
 //        this.bookService
 //                .getAllWithPriceLessThan5AndGreaterThan40()
 //                .forEach(System.out::println);
 
-    // 4. Not Released Books
+        // 4. Not Released Books
 //        this.bookService
 //                .getAllNotReleasedInGivenYear(1998)
 //                .forEach(System.out::println);
 
-    // 5. Books Released Before Date
+        // 5. Books Released Before Date
 //        this.bookService
 //                .getAllBeforeGivenDate(LocalDate.parse("12/04/1992", DateTimeFormatter.ofPattern("d/M/yyyy")))
 //                .forEach(System.out::println);
 
-    // 6. Authors Search
+        // 6. Authors Search
 //        this.authorService
 //                .getAllEndingWith("dy")
 //                .forEach(System.out::println);
 
-    // 6. Book search by author ending with
+        // 6. Book search by author ending with
 //        this.bookService
 //                .getAllByAuthorFirstNameEndingWith("dy")
 //                .forEach(System.out::println);
 
-    // 7. Books Search
+        // 7. Books Search
 //        this.bookService
 //                .getAllWithTitleContaining("WOR")
 //                .forEach(System.out::println);
 
-    // 8. Book Titles Search
+        // 8. Book Titles Search
 //        this.bookService
 //                .getAllWithAuthorLastNameStartingWith("Ric")
 //                .forEach(System.out::println);
 
-    // 9. Count Books
+        // 9. Count Books
 //        System.out.println(this.bookService
 //                .getCountOfAllWithGivenTitleLength(40));
 
-    // 10. Total Book Copies
+        // 10. Total Book Copies
+//        this.authorService
+//                .getAllBookCopiesCount()
+//                .forEach(System.out::println);
 
-  }
+        // 11. Reduced Book
+//        System.out.println(this.bookService
+//                .getReducedBookByTitle("Things Fall Apart"));
+
+        // 12. * Increase Book Copies
+//        System.out.println(this.bookService
+//                .increaseNumberOfBooksWithReleasedDateAfter(100,
+//                        LocalDate.parse("12/10/2005", DateTimeFormatter.ofPattern("d/M/yyyy"))) * 100);
+
+        // 13. * Remove Books
+//        System.out.println(this.bookService
+//                .deleteAllWithCopiesCountLowerThan(211));
+
+        // 14. * Stored Procedure
+        System.out.println(this.authorService
+                .getCountOfBooksWritten("Amanda", "Rice"));
+
+        System.out.println("yoyo");
+    }
 }

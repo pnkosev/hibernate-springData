@@ -5,19 +5,19 @@ import javax.persistence.*;
 @MappedSuperclass
 public abstract class BaseEntity {
 
-  private Integer id;
+    private Integer id;
 
-  public BaseEntity() {
-  }
+    public BaseEntity() {
+    }
 
-  @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "id")
-  public Integer getId() {
-    return id;
-  }
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    public Integer getId() {
+        return id;
+    }
 
-  public void setId(Integer id) {
-    this.id = id;
-  }
+    public void setId(Integer id) {
+        this.id = id;
+    }
 }

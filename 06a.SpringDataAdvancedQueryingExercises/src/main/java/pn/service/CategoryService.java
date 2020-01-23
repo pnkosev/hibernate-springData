@@ -4,5 +4,5 @@ import java.io.IOException;
 
 public interface CategoryService {
 
-  void seedCategories() throws IOException;
+    void seedCategories() throws IOException;
 }
