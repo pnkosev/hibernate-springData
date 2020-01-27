@@ -9,6 +9,7 @@ import pn.advancedquerying.domain.entities.Size;
 import pn.advancedquerying.services.IngredientService;
 import pn.advancedquerying.services.LabelService;
 import pn.advancedquerying.services.ShampooService;
+import pn.advancedquerying.utils.ScannerUtil;
 
 import java.util.Arrays;
 import java.util.List;

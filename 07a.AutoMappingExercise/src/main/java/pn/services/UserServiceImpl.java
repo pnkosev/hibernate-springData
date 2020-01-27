@@ -48,7 +48,6 @@ public class UserServiceImpl implements UserService {
             }
         }
 
-
         if (userRepository.count() == 0) {
             user.setRole(Role.ADMIN);
         } else  {
