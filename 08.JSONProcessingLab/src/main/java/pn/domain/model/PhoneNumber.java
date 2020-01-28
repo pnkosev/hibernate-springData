@@ -1,4 +1,4 @@
-package app.domain.model;
+package pn.domain.model;
 
 import javax.persistence.*;
 import java.io.Serializable;

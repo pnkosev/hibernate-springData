@@ -1,4 +1,4 @@
-package pn.service.impl;
+package pn.service;
 
 import pn.domain.dto.PersonDto;
 import pn.domain.model.Person;

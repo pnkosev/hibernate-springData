@@ -1,12 +1,13 @@
-package app.domain.model;
+package pn.domain.model;
 
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.lang.annotation.Target;
 
 @Entity
 @Table(name = "addresses")
-public class Address {
+public class Address implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

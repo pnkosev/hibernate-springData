@@ -1,4 +1,4 @@
-package app.domain.model;
+package pn.domain.model;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -23,7 +23,7 @@ public class Person implements Serializable {
     @JoinColumn(name = "address_id", referencedColumnName = "id")
     private Address address;
 
-    @OneToMany(mappedBy = "person", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "person", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<PhoneNumber> phoneNumbers;
 
     public Person() {
