@@ -7,6 +7,7 @@ import pn.domain.dto.binding.CategoryDTO;
 import pn.domain.dto.binding.ProductDTO;
 import pn.domain.dto.binding.UserDTO;
 import pn.domain.dto.view.ProductSellerDTO;
+import pn.domain.dto.view.UserProductSoldDTO;
 import pn.service.CategoryService;
 import pn.service.ProductService;
 import pn.service.UserService;
@@ -35,7 +36,7 @@ public class AppController implements CommandLineRunner {
     public void run(String... args) {
         this.seedDatabase();
 
-        this.saveInJsonAllProductsWithPriceBetween500And1000();
+        this.saveInJsonAllSuccessfulSellers();
 
         System.out.println("yoyo");
     }
@@ -64,12 +65,22 @@ public class AppController implements CommandLineRunner {
         this.categoryService.createMultipleCategories(Arrays.asList(categories));
     }
 
+    private void saveInJsonAllProductsWithPriceBetween500And1000() {
+        List<ProductSellerDTO> products = this.getAllProductsWithPriceBetween500And1000OrderedByPrice();
+        jsonParser.objectToFile(products, "src/main/resources/output/products-in-range.json");
+    }
+
     private List<ProductSellerDTO> getAllProductsWithPriceBetween500And1000OrderedByPrice() {
         return this.productService.getAllByPriceBetween500And1000WithoutBuyerOrderedByPrice();
     }
 
-    private void saveInJsonAllProductsWithPriceBetween500And1000() {
-        List<ProductSellerDTO> products = this.getAllProductsWithPriceBetween500And1000OrderedByPrice();
-        jsonParser.objectToFile(products, "src/main/resources/output/products-in-range.json");
+    private void saveInJsonAllSuccessfulSellers() {
+        List<UserProductSoldDTO> users = this.getAllUsersWithSoldProducts();
+
+        jsonParser.objectToFile(users, "src/main/resources/output/users-with-products-sold.json");
+    }
+
+    private List<UserProductSoldDTO> getAllUsersWithSoldProducts() {
+        return this.userService.getUsersWithSoldProducts();
     }
 }

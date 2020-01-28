@@ -4,6 +4,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pn.domain.dto.binding.UserDTO;
+import pn.domain.dto.view.UserProductSoldDTO;
 import pn.domain.entity.User;
 import pn.repository.UserRepository;
 import pn.service.UserService;
@@ -11,6 +12,8 @@ import pn.service.UserService;
 import javax.transaction.Transactional;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Transactional
 @Service
@@ -46,5 +49,13 @@ public class UserServiceImpl implements UserService {
     @Override
     public User getRandomUser() {
         return this.userRepository.getRandomEntity();
+    }
+
+    @Override
+    public List<UserProductSoldDTO> getUsersWithSoldProducts() {
+        return this.userRepository.findAllByProductsSold()
+                .stream()
+                .map(u -> mapper.map(u, UserProductSoldDTO.class))
+                .collect(Collectors.toList());
     }
 }
