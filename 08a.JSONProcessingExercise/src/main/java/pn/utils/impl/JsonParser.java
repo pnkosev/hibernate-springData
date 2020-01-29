@@ -32,6 +32,12 @@ public class JsonParser implements Parser {
     }
 
     @Override
+    public <T> void objectToFile(T klass, String path) {
+        String json = gson.toJson(klass);
+        TextFileUtils.write(path, json);
+    }
+
+    @Override
     public <T> void objectToFile(Collection<T> list, String path) {
         String json = gson.toJson(list);
         TextFileUtils.write(path, json);

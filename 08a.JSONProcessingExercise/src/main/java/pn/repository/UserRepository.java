@@ -3,6 +3,7 @@ package pn.repository;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
+import pn.domain.dto.view.UserCountDTO;
 import pn.domain.entity.User;
 
 import java.util.List;

@@ -1,6 +1,7 @@
 package pn.service;
 
 import pn.domain.dto.binding.UserDTO;
+import pn.domain.dto.view.UserCountDTO;
 import pn.domain.dto.view.UserProductSoldDTO;
 import pn.domain.entity.User;
 
@@ -13,4 +14,6 @@ public interface UserService {
     User getRandomUser();
 
     List<UserProductSoldDTO> getUsersWithSoldProducts();
+
+    UserCountDTO getSellsByUser();
 }

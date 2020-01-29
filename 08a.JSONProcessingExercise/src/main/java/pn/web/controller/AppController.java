@@ -8,6 +8,7 @@ import pn.domain.dto.binding.ProductDTO;
 import pn.domain.dto.binding.UserDTO;
 import pn.domain.dto.view.CategoryProductCountDTO;
 import pn.domain.dto.view.ProductSellerDTO;
+import pn.domain.dto.view.UserCountDTO;
 import pn.domain.dto.view.UserProductSoldDTO;
 import pn.domain.entity.Category;
 import pn.service.CategoryService;
@@ -28,6 +29,7 @@ public class AppController implements CommandLineRunner {
     private static final String CATEGORIES_PRODUCTS_COUNT_PATH = OUTPUT_PATH + "categories-products-count.json";
     private static final String PRODUCTS_IN_RANGE_PATH = OUTPUT_PATH + "products-in-range.json";
     private static final String USERS_WITH_PRODUCTS_SOLD_PATH = OUTPUT_PATH + "users-with-products-sold.json";
+    private static final String USERS_WITH_PRODUCTS_SOLD_DETAILED_PATH = OUTPUT_PATH + "users-with-products-sold-detailed.json";
 
     private final JsonParser jsonParser;
     private final UserService userService;
@@ -56,7 +58,7 @@ public class AppController implements CommandLineRunner {
 //        this.saveInJsonAllCategoriesByProductCount();
 
         // Query 4
-        
+        this.saveInJsonAllUsersBySoldProductsWithDetails();
 
         System.out.println("yoyo");
     }
@@ -111,5 +113,14 @@ public class AppController implements CommandLineRunner {
 
     private List<CategoryProductCountDTO> getAllCategoriesByProductCount() {
         return this.categoryService.getAllByProductCount();
+    }
+
+    private void saveInJsonAllUsersBySoldProductsWithDetails() {
+        UserCountDTO userCountDTO = this.getAllUsersBySoldProductsWithDetails();
+        this.jsonParser.objectToFile(userCountDTO, USERS_WITH_PRODUCTS_SOLD_DETAILED_PATH);
+    }
+
+    private UserCountDTO getAllUsersBySoldProductsWithDetails() {
+        return this.userService.getSellsByUser();
     }
 }
