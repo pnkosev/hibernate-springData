@@ -4,6 +4,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pn.domain.dto.binding.CategoryDTO;
+import pn.domain.dto.view.CategoryProductCountDTO;
 import pn.domain.entity.Category;
 import pn.repository.CategoryRepository;
 import pn.service.CategoryService;
@@ -11,6 +12,7 @@ import pn.service.CategoryService;
 import javax.transaction.Transactional;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 @Transactional
 @Service
@@ -36,5 +38,10 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public Category getRandomCategory() {
         return this.categoryRepository.getRandomCategory();
+    }
+
+    @Override
+    public List<CategoryProductCountDTO> getAllByProductCount() {
+        return this.categoryRepository.getAllOrderedByProductCount();
     }
 }
