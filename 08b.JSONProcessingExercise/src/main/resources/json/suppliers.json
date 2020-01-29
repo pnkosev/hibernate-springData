@@ -1,5 +1,9 @@
 [
   {
+    "name": "NO",
+    "isImporter": true
+  },
+  {
     "name": "3M Company",
     "isImporter": true
   },
@@ -122,5 +126,9 @@
   {
     "name": "Zale",
     "isImporter": false
+  },
+  {
+    "name": "NO",
+    "isImporter": true
   }
 ]
