@@ -8,14 +8,9 @@ import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 
 public class UserDTO implements Serializable {
-    @NotNull
+
     private String firstName;
-
-    @Length(min = 3)
-    @NotNull
     private String lastName;
-
-    @Min(3)
     private int age;
 
     public UserDTO() {
@@ -35,6 +30,8 @@ public class UserDTO implements Serializable {
         this.firstName = firstName;
     }
 
+    @NotNull(message = "Last name cannot be null")
+    @Length(min = 3, message = "Min length is 3 characters")
     public String getLastName() {
         return this.lastName;
     }
@@ -43,6 +40,7 @@ public class UserDTO implements Serializable {
         this.lastName = lastName;
     }
 
+    @Min(value = 0, message = "Age cannot be negative")
     public int getAge() {
         return this.age;
     }

@@ -12,13 +12,11 @@ import pn.repository.ProductRepository;
 import pn.service.CategoryService;
 import pn.service.ProductService;
 import pn.service.UserService;
+import pn.utils.ValidatorUtils;
 
 import javax.transaction.Transactional;
 import java.math.BigDecimal;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Transactional
@@ -28,19 +26,37 @@ public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final UserService userService;
     private final CategoryService categoryService;
+    private final ValidatorUtils validator;
 
     @Autowired
-    public ProductServiceImpl(ProductRepository productRepository, ModelMapper mapper, UserService userService, CategoryService categoryService) {
+    public ProductServiceImpl(ProductRepository productRepository,
+                              ModelMapper mapper,
+                              UserService userService,
+                              CategoryService categoryService,
+                              ValidatorUtils validator) {
         this.productRepository = productRepository;
         this.mapper = mapper;
         this.userService = userService;
         this.categoryService = categoryService;
+        this.validator = validator;
     }
 
     @Override
     public void createMultipleProducts(Collection<ProductDTO> productDTOs) {
         if (this.productRepository.count() == 0) {
-            Product[] products = this.mapper.map(productDTOs, Product[].class);
+            List<ProductDTO> validDTOs = new ArrayList<>();
+
+            for (ProductDTO productDTO : productDTOs) {
+                if (!this.validator.isValid(productDTO)) {
+                    this.validator.getViolations(productDTO)
+                            .forEach(v -> System.out.println(v.getMessage()));
+                    continue;
+                }
+
+                validDTOs.add(productDTO);
+            }
+
+            Product[] products = this.mapper.map(validDTOs, Product[].class);
 
             Random random = new Random();
             for (Product product : products) {

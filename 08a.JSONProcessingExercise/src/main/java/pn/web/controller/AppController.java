@@ -58,7 +58,7 @@ public class AppController implements CommandLineRunner {
 //        this.saveInJsonAllCategoriesByProductCount();
 
         // Query 4
-        this.saveInJsonAllUsersBySoldProductsWithDetails();
+//        this.saveInJsonAllUsersBySoldProductsWithDetails();
 
         System.out.println("yoyo");
     }

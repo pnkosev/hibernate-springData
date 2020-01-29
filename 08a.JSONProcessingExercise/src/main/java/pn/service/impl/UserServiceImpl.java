@@ -8,8 +8,10 @@ import pn.domain.dto.view.*;
 import pn.domain.entity.User;
 import pn.repository.UserRepository;
 import pn.service.UserService;
+import pn.utils.ValidatorUtils;
 
 import javax.transaction.Transactional;
+import javax.validation.Validator;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -19,20 +21,32 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final ModelMapper mapper;
+    private final ValidatorUtils validatorUtils;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, ModelMapper mapper) {
+    public UserServiceImpl(UserRepository userRepository, ModelMapper mapper, ValidatorUtils validatorUtils, Validator validator) {
         this.userRepository = userRepository;
         this.mapper = mapper;
+        this.validatorUtils = validatorUtils;
     }
 
     @Override
     public void createMultipleUsers(Collection<UserDTO> userDTOs) {
         if (this.userRepository.count() == 0) {
-            User[] users = mapper.map(userDTOs, User[].class);
-            this.userRepository.saveAll(Arrays.asList(users));
 
-            for (int i = 0; i < users.length * 2; i++) {
+            for (UserDTO userDTO : userDTOs) {
+                if (!this.validatorUtils.isValid(userDTO)) {
+                    this.validatorUtils.getViolations(userDTO).forEach(v -> System.out.println(v.getMessage()));
+                    continue;
+                }
+
+                User user = mapper.map(userDTO, User.class);
+                this.userRepository.save(user);
+            }
+
+            List<User> users = this.userRepository.findAll();
+
+            for (int i = 0; i < users.size() * 2; i++) {
                 User randomUser = this.getRandomUser();
                 User randomFriend = this.getRandomUser();
 

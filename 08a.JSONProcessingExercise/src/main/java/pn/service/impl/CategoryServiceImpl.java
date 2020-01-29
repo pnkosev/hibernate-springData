@@ -8,8 +8,10 @@ import pn.domain.dto.view.CategoryProductCountDTO;
 import pn.domain.entity.Category;
 import pn.repository.CategoryRepository;
 import pn.service.CategoryService;
+import pn.utils.ValidatorUtils;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
@@ -19,17 +21,29 @@ import java.util.List;
 public class CategoryServiceImpl implements CategoryService {
     private final ModelMapper mapper;
     private final CategoryRepository categoryRepository;
+    private final ValidatorUtils validator;
 
     @Autowired
-    public CategoryServiceImpl(ModelMapper mapper, CategoryRepository categoryRepository) {
+    public CategoryServiceImpl(ModelMapper mapper, CategoryRepository categoryRepository, ValidatorUtils validator) {
         this.mapper = mapper;
         this.categoryRepository = categoryRepository;
+        this.validator = validator;
     }
 
     @Override
     public void createMultipleCategories(Collection<CategoryDTO> categoryDTOs) {
         if (this.categoryRepository.count() == 0) {
-            Category[] categories = this.mapper.map(categoryDTOs, Category[].class);
+            List<CategoryDTO> validDTOs = new ArrayList<>();
+            for (CategoryDTO categoryDTO : categoryDTOs) {
+                if (!this.validator.isValid(categoryDTO)) {
+                    this.validator.getViolations(categoryDTO)
+                            .forEach(v -> System.out.println(v.getMessage()));
+                    continue;
+                }
+                validDTOs.add(categoryDTO);
+            }
+
+            Category[] categories = this.mapper.map(validDTOs, Category[].class);
 
             this.categoryRepository.saveAll(Arrays.asList(categories));
         }

@@ -2,15 +2,18 @@ package pn.domain.dto.binding;
 
 import org.hibernate.validator.constraints.Length;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
 public class ProductDTO implements Serializable {
-    @Length(min = 3)
+    @NotNull(message = "Name cannot be null")
+    @Length(min = 3, message = "Name must be at least 3 characters")
     private String name;
 
-    @NotNull
+    @NotNull(message = "Price cannot be null")
+    @Min(value = 0, message = "Price must be a positive number")
     private BigDecimal price;
 
     public ProductDTO() {
