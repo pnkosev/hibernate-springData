@@ -3,7 +3,7 @@ package pn.services.impl;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import pn.models.dtos.CarDTO;
+import pn.models.dtos.bindings.CarDTO;
 import pn.models.entities.Car;
 import pn.models.entities.Part;
 import pn.repositories.CarRepository;
@@ -13,7 +13,6 @@ import pn.utils.api.Parser;
 import pn.utils.api.RandomUtils;
 import pn.utils.api.ValidatorUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 

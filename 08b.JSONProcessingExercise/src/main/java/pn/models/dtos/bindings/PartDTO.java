@@ -1,4 +1,4 @@
-package pn.models.dtos;
+package pn.models.dtos.bindings;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

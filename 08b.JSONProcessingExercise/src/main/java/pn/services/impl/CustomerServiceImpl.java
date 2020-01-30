@@ -3,7 +3,7 @@ package pn.services.impl;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import pn.models.dtos.CustomerDTO;
+import pn.models.dtos.bindings.CustomerDTO;
 import pn.models.entities.Customer;
 import pn.repositories.CustomerRepository;
 import pn.services.api.CustomerService;

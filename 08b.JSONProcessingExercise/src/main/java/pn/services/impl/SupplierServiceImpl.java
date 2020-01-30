@@ -2,7 +2,7 @@ package pn.services.impl;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
-import pn.models.dtos.SupplierDTO;
+import pn.models.dtos.bindings.SupplierDTO;
 import pn.models.entities.Supplier;
 import pn.repositories.SupplierRepository;
 import pn.services.api.SupplierService;

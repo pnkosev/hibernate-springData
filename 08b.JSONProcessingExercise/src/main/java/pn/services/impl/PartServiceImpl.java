@@ -3,7 +3,7 @@ package pn.services.impl;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import pn.models.dtos.PartDTO;
+import pn.models.dtos.bindings.PartDTO;
 import pn.models.entities.Part;
 import pn.models.entities.Supplier;
 import pn.repositories.PartRepository;
@@ -12,7 +12,6 @@ import pn.services.api.SupplierService;
 import pn.utils.api.Parser;
 import pn.utils.api.ValidatorUtils;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
