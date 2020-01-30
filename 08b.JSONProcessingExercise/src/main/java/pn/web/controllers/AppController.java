@@ -2,6 +2,7 @@ package pn.web.controllers;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Controller;
+import pn.models.dtos.views.CarViewDTO;
 import pn.models.dtos.views.CustomerByBirthDateDTO;
 import pn.services.api.*;
 import pn.utils.api.Parser;
@@ -15,6 +16,7 @@ public class AppController implements CommandLineRunner {
     private final static String CARS_SEED_PATH = "src/main/resources/json/input/cars.json";
     private final static String CUSTOMERS_SEED_PATH = "src/main/resources/json/input/customers.json";
     private final static String CUSTOMERS_BY_BIRTH_DATE_OUTPUT = "src/main/resources/json/output/customers-by-birth-date.json";
+    private final static String CARS_VIEW_OUTPUT = "src/main/resources/json/output/cars-view.json";
 
     private final SupplierService supplierService;
     private final PartService partService;
@@ -38,6 +40,10 @@ public class AppController implements CommandLineRunner {
 
         // Query 1
 //        this.exportCustomersByBirthDate();
+
+        // Query 2
+        List<CarViewDTO> toyotaList = this.carService.getCarsByMake("Toyota");
+        this.parser.objectToJSON(CARS_VIEW_OUTPUT, toyotaList);
 
         System.out.println("yoyo");
     }

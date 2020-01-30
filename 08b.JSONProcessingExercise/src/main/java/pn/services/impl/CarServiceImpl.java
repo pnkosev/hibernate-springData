@@ -4,6 +4,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pn.models.dtos.bindings.CarDTO;
+import pn.models.dtos.views.CarViewDTO;
 import pn.models.entities.Car;
 import pn.models.entities.Part;
 import pn.repositories.CarRepository;
@@ -15,6 +16,7 @@ import pn.utils.api.ValidatorUtils;
 
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 @Service
 public class CarServiceImpl implements CarService {
@@ -71,5 +73,13 @@ public class CarServiceImpl implements CarService {
     @Override
     public List<Car> getALLCars() {
         return this.carRepository.findAll();
+    }
+
+    @Override
+    public List<CarViewDTO> getCarsByMake(String make) {
+        return this.carRepository.findAllByMakeOrderByModelAscTravelledDistanceDesc(make)
+                .stream()
+                .map(c -> mapper.map(c, CarViewDTO.class))
+                .collect(Collectors.toList());
     }
 }
