@@ -4,13 +4,16 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pn.models.dtos.bindings.CustomerDTO;
+import pn.models.dtos.views.CustomerByBirthDateDTO;
 import pn.models.entities.Customer;
 import pn.repositories.CustomerRepository;
 import pn.services.api.CustomerService;
 import pn.utils.api.Parser;
 import pn.utils.api.ValidatorUtils;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class CustomerServiceImpl implements CustomerService {
@@ -52,5 +55,17 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public List<Customer> getAllCustomers() {
         return this.customerRepository.findAll();
+    }
+
+    @Override
+    public List<CustomerByBirthDateDTO> getAllCustomersOrderedByBirthDate() {
+        return this.customerRepository.findAllOrderedByBirthDateAscAndYoungDriver()
+                .stream()
+                .map(c -> mapper.map(c, CustomerByBirthDateDTO.class))
+                .collect(Collectors.toList());
+
+
+
+//        return new ArrayList<>();
     }
 }

@@ -2,7 +2,11 @@ package pn.web.controllers;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Controller;
+import pn.models.dtos.views.CustomerByBirthDateDTO;
 import pn.services.api.*;
+import pn.utils.api.Parser;
+
+import java.util.List;
 
 @Controller
 public class AppController implements CommandLineRunner {
@@ -10,19 +14,22 @@ public class AppController implements CommandLineRunner {
     private final static String PARTS_SEED_PATH = "src/main/resources/json/input/parts.json";
     private final static String CARS_SEED_PATH = "src/main/resources/json/input/cars.json";
     private final static String CUSTOMERS_SEED_PATH = "src/main/resources/json/input/customers.json";
+    private final static String CUSTOMERS_BY_BIRTH_DATE_OUTPUT = "src/main/resources/json/output/customers-by-birth-date.json";
 
     private final SupplierService supplierService;
     private final PartService partService;
     private final CarService carService;
     private final CustomerService customerService;
     private final SaleService saleService;
+    private final Parser parser;
 
-    public AppController(SupplierService supplierService, PartService partService, CarService carService, CustomerService customerService, SaleService saleService) {
+    public AppController(SupplierService supplierService, PartService partService, CarService carService, CustomerService customerService, SaleService saleService, Parser parser) {
         this.supplierService = supplierService;
         this.partService = partService;
         this.carService = carService;
         this.customerService = customerService;
         this.saleService = saleService;
+        this.parser = parser;
     }
 
     @Override
@@ -30,7 +37,7 @@ public class AppController implements CommandLineRunner {
         this.seedDatabase();
 
         // Query 1
-
+//        this.exportCustomersByBirthDate();
 
         System.out.println("yoyo");
     }
@@ -58,4 +65,9 @@ public class AppController implements CommandLineRunner {
     }
 
     private void seedSales() { this.saleService.seedMultipleSales(); }
+
+    private void exportCustomersByBirthDate() {
+        List<CustomerByBirthDateDTO> customers = this.customerService.getAllCustomersOrderedByBirthDate();
+        this.parser.objectToJSON(CUSTOMERS_BY_BIRTH_DATE_OUTPUT, customers);
+    }
 }
