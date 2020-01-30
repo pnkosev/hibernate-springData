@@ -15,7 +15,6 @@ public class ApplicationConfiguration {
     private static ModelMapper mapper;
     private static Gson gson;
     private static Validator validator;
-    private static Random random;
 
     static {
         mapper = new ModelMapper();
@@ -24,7 +23,6 @@ public class ApplicationConfiguration {
                 .setDateFormat("yyyy-MM-dd'T'hh:mm:ss")
                 .create();;
         validator = Validation.buildDefaultValidatorFactory().getValidator();
-        random = new Random();
     }
 
     @Bean
@@ -37,7 +35,4 @@ public class ApplicationConfiguration {
 
     @Bean
     public Validator validator() { return validator; }
-
-    @Bean
-    public Random random() { return random; }
 }
