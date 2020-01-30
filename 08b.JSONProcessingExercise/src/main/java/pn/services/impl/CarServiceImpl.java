@@ -43,8 +43,6 @@ public class CarServiceImpl implements CarService {
         if (this.carRepository.count() == 0) {
             CarDTO[] carDTOs = this.parser.objectFromJSON(path, CarDTO[].class);
 
-//            List<Car> validCars = new ArrayList<>();
-
             for (CarDTO carDTO : carDTOs) {
                 if (!this.validator.isValid(carDTO)) {
                     this.validator.getViolations(carDTO)
@@ -55,17 +53,10 @@ public class CarServiceImpl implements CarService {
 
                 Car car = mapper.map(carDTO, Car.class);
 
-                // int randomInt = ThreadLocalRandom.current().nextInt(10, 21);             // Solution 1
-//                int randomInt = this.random.randomInt(10, 20);                              // Solution 2
-//
-//                for (int i = 0; i < randomInt; i++) {
-//                    Part randomPart = this.partService.getRandomPart();
-//                    randomPart.getCars().add(car);
-//                    car.getParts().add(randomPart);
-//                }
-
                 List<Part> allParts = this.partService.getAllParts();
+
                 final Random random = new Random();
+
                 do {
                     car.getParts().add(allParts.get(random.nextInt(allParts.size())));
                     if (random.nextInt(5) == 0 && car.getParts().size() >= 10) {
@@ -73,7 +64,6 @@ public class CarServiceImpl implements CarService {
                     }
                 } while (car.getParts().size() <= 20);
 
-//                validCars.add(car);
                 this.carRepository.save(car);
             }
 
