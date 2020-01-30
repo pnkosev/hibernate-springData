@@ -7,17 +7,20 @@ import org.springframework.context.annotation.Configuration;
 
 import javax.validation.Validation;
 import javax.validation.Validator;
+import java.util.Random;
 
 @Configuration
 public class ApplicationConfiguration {
     private static ModelMapper mapper;
     private static Gson gson;
     private static Validator validator;
+    private static Random random;
 
     static {
         mapper = new ModelMapper();
         gson = new Gson();
         validator = Validation.buildDefaultValidatorFactory().getValidator();
+        random = new Random();
     }
 
     @Bean
@@ -30,4 +33,7 @@ public class ApplicationConfiguration {
 
     @Bean
     public Validator validator() { return validator; }
+
+    @Bean
+    public Random random() { return random; }
 }

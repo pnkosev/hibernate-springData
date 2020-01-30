@@ -2,6 +2,7 @@ package pn.web.controllers;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Controller;
+import pn.services.api.CarService;
 import pn.services.api.PartService;
 import pn.services.api.SupplierService;
 
@@ -9,13 +10,16 @@ import pn.services.api.SupplierService;
 public class AppController implements CommandLineRunner {
     private final static String SUPPLIERS_SEED_PATH = "src/main/resources/json/suppliers.json";
     private final static String PARTS_SEED_PATH = "src/main/resources/json/parts.json";
+    private final static String CARS_SEED_PATH = "src/main/resources/json/cars.json";
 
     private final SupplierService supplierService;
     private final PartService partService;
+    private final CarService carService;
 
-    public AppController(SupplierService supplierService, PartService partService) {
+    public AppController(SupplierService supplierService, PartService partService, CarService carService) {
         this.supplierService = supplierService;
         this.partService = partService;
+        this.carService = carService;
     }
 
     @Override
@@ -28,6 +32,7 @@ public class AppController implements CommandLineRunner {
     private void seedDatabase() {
         this.seedSuppliers();
         this.seedParts();
+        this.seedCars();
     }
 
     private void seedSuppliers() {
@@ -37,4 +42,6 @@ public class AppController implements CommandLineRunner {
     private void seedParts() {
         this.partService.seedMultipleParts(PARTS_SEED_PATH);
     }
+
+    private void seedCars() { this.carService.seedMultipleCars(CARS_SEED_PATH); }
 }

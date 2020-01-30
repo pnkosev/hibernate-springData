@@ -1,16 +1,15 @@
 package pn.models.entities;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @Entity
 @Table(name = "parts")
 public class Part extends BaseEntity {
@@ -28,11 +27,10 @@ public class Part extends BaseEntity {
     @JoinColumn(name = "supplier_id", referencedColumnName = "id")
     private Supplier supplier;
 
-    @ManyToMany(targetEntity = Car.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "parts_cars",
-            joinColumns = @JoinColumn(name = "part_id", referencedColumnName = "id"),
-            inverseJoinColumns = @JoinColumn(name = "car_id", referencedColumnName = "id")
-    )
-    private List<Car> cars;
+    @ManyToMany(mappedBy = "parts")
+    private Set<Car> cars;
+
+    public Part() {
+        this.cars = new HashSet<>();
+    }
 }

@@ -62,4 +62,14 @@ public class PartServiceImpl implements PartService {
     private Supplier getRandomSupplier() {
         return this.supplierService.getRandomSupplier();
     }
+
+    @Override
+    public Part getRandomPart() {
+        return this.partRepository.getRandomPart();
+    }
+
+    @Override
+    public List<Part> getAllParts() {
+        return this.partRepository.findAll();
+    }
 }

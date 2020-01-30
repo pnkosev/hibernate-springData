@@ -1,15 +1,15 @@
 package pn.models.entities;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @Entity
 @Table(name = "cars")
 public class Car extends BaseEntity {
@@ -20,11 +20,20 @@ public class Car extends BaseEntity {
     private String model;
 
     @Column(name = "travelled_distance")
-    private int travelledDistance;
+    private Long travelledDistance;
 
     @OneToMany(mappedBy = "car")
     private List<Sale> sales;
 
-    @ManyToMany(mappedBy = "cars")
-    private List<Part> parts;
+    @ManyToMany
+    @JoinTable(
+            name = "parts_cars",
+            joinColumns = @JoinColumn(name = "part_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "car_id", referencedColumnName = "id")
+    )
+    private Set<Part> parts;
+
+    public Car() {
+        this.parts = new HashSet<>();
+    }
 }
