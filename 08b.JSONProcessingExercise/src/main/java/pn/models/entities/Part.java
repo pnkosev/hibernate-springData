@@ -24,7 +24,7 @@ public class Part extends BaseEntity {
     @Column(name = "quantity")
     private int quantity;
 
-    @ManyToOne(targetEntity = Supplier.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne(targetEntity = Supplier.class)
     @JoinColumn(name = "supplier_id", referencedColumnName = "id")
     private Supplier supplier;
 

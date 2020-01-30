@@ -43,4 +43,9 @@ public class SupplierServiceImpl implements SupplierService {
             }
         }
     }
+
+    @Override
+    public Supplier getRandomSupplier() {
+        return this.supplierRepository.getRandomSupplier();
+    }
 }
