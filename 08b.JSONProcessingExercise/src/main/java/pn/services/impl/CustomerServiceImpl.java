@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pn.models.dtos.bindings.CustomerDTO;
 import pn.models.dtos.views.CustomerByBirthDateDTO;
+import pn.models.dtos.views.CustomerPurchaseViewDTO;
 import pn.models.entities.Customer;
 import pn.repositories.CustomerRepository;
 import pn.services.api.CustomerService;
@@ -63,9 +64,10 @@ public class CustomerServiceImpl implements CustomerService {
                 .stream()
                 .map(c -> mapper.map(c, CustomerByBirthDateDTO.class))
                 .collect(Collectors.toList());
+    }
 
-
-
-//        return new ArrayList<>();
+    @Override
+    public List<CustomerPurchaseViewDTO> getAllCustomersWithAtLeastOnePurchase() {
+        return this.customerRepository.findAllCustomersWithAtLeastOnePurchase();
     }
 }

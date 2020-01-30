@@ -2,10 +2,7 @@ package pn.web.controllers;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Controller;
-import pn.models.dtos.views.CarPartViewDTO;
-import pn.models.dtos.views.CarViewDTO;
-import pn.models.dtos.views.CustomerByBirthDateDTO;
-import pn.models.dtos.views.SupplierViewDTO;
+import pn.models.dtos.views.*;
 import pn.services.api.*;
 import pn.utils.api.Parser;
 
@@ -54,6 +51,10 @@ public class AppController implements CommandLineRunner {
 
         // Query 4
 //        this.exportCarsWithTheirParts();
+
+        // Query 5
+        List<CustomerPurchaseViewDTO> allCustomersWithAtLeastOnePurchase = this.customerService.getAllCustomersWithAtLeastOnePurchase();
+
 
         System.out.println("yoyo");
     }
