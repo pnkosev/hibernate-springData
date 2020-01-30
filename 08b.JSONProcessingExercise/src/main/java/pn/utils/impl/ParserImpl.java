@@ -5,6 +5,8 @@ import org.springframework.stereotype.Component;
 import pn.utils.api.FileUtils;
 import pn.utils.api.Parser;
 
+import java.util.Collection;
+
 @Component
 public class ParserImpl implements Parser {
     private final Gson gson;
@@ -28,5 +30,10 @@ public class ParserImpl implements Parser {
     @Override
     public <T> T objectFromJSON(String path, Class<T> klass) {
         return this.gson.fromJson(this.fileUtils.read(path), klass);
+    }
+
+    @Override
+    public <T> void objectToJSON(String path, Collection<T> list) {
+        this.fileUtils.write(path, this.gson.toJson(list));
     }
 }
