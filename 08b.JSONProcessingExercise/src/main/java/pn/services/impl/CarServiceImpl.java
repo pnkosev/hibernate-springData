@@ -4,7 +4,10 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pn.models.dtos.bindings.CarDTO;
+import pn.models.dtos.views.CarPartViewDTO;
 import pn.models.dtos.views.CarViewDTO;
+import pn.models.dtos.views.CarViewNoIdDTO;
+import pn.models.dtos.views.PartViewDTO;
 import pn.models.entities.Car;
 import pn.models.entities.Part;
 import pn.repositories.CarRepository;
@@ -14,6 +17,7 @@ import pn.utils.api.Parser;
 import pn.utils.api.RandomUtils;
 import pn.utils.api.ValidatorUtils;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
@@ -80,6 +84,18 @@ public class CarServiceImpl implements CarService {
         return this.carRepository.findAllByMakeOrderByModelAscTravelledDistanceDesc(make)
                 .stream()
                 .map(c -> mapper.map(c, CarViewDTO.class))
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public List<CarPartViewDTO> getAllCarsWithTheirParts() {
+        return this.carRepository.findAllCarsWithTheirParts()
+                .stream()
+                .map(c -> {
+                    CarViewNoIdDTO carViewNoIdDTO = mapper.map(c, CarViewNoIdDTO.class);
+                    PartViewDTO[] partViewDTOS = mapper.map(c.getParts(), PartViewDTO[].class);
+                    return new CarPartViewDTO(carViewNoIdDTO, Arrays.asList(partViewDTOS));
+                })
                 .collect(Collectors.toList());
     }
 }

@@ -1,5 +1,6 @@
 package pn.services.api;
 
+import pn.models.dtos.views.CarPartViewDTO;
 import pn.models.dtos.views.CarViewDTO;
 import pn.models.entities.Car;
 
@@ -11,4 +12,6 @@ public interface CarService {
     List<Car> getALLCars();
 
     List<CarViewDTO> getCarsByMake(String make);
+
+    List<CarPartViewDTO> getAllCarsWithTheirParts();
 }

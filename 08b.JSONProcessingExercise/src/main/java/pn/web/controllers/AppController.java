@@ -2,6 +2,7 @@ package pn.web.controllers;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Controller;
+import pn.models.dtos.views.CarPartViewDTO;
 import pn.models.dtos.views.CarViewDTO;
 import pn.models.dtos.views.CustomerByBirthDateDTO;
 import pn.models.dtos.views.SupplierViewDTO;
@@ -20,6 +21,7 @@ public class AppController implements CommandLineRunner {
     private final static String CUSTOMERS_BY_BIRTH_DATE_OUTPUT = "src/main/resources/json/output/customers-by-birth-date.json";
     private final static String CARS_VIEW_OUTPUT = "src/main/resources/json/output/cars-view.json";
     private final static String SUPPLIERS_VIEW_OUTPUT = "src/main/resources/json/output/suppliers-view.json";
+    private final static String CARS_PARTS_OUTPUT = "src/main/resources/json/output/cars-parts.json";
 
     private final SupplierService supplierService;
     private final PartService partService;
@@ -49,6 +51,9 @@ public class AppController implements CommandLineRunner {
 
         // Query 3
 //        this.exportLocalSuppliers();
+
+        // Query 4
+//        this.exportCarsWithTheirParts();
 
         System.out.println("yoyo");
     }
@@ -90,5 +95,10 @@ public class AppController implements CommandLineRunner {
     private void exportLocalSuppliers() {
         List<SupplierViewDTO> suppliers = this.supplierService.getAllNonImportingSuppliers();
         this.parser.objectToJSON(SUPPLIERS_VIEW_OUTPUT, suppliers);
+    }
+
+    private void exportCarsWithTheirParts() {
+        List<CarPartViewDTO> allCarsWithTheirParts = carService.getAllCarsWithTheirParts();
+        this.parser.objectToJSON(CARS_PARTS_OUTPUT, allCarsWithTheirParts);
     }
 }

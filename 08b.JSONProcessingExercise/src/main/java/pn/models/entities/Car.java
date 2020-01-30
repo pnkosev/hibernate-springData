@@ -22,10 +22,10 @@ public class Car extends BaseEntity {
     @Column(name = "travelled_distance")
     private Long travelledDistance;
 
-    @OneToMany(mappedBy = "car", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "car", cascade = CascadeType.ALL)
     private List<Sale> sales;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "parts_cars",
             joinColumns = @JoinColumn(name = "part_id", referencedColumnName = "id"),
