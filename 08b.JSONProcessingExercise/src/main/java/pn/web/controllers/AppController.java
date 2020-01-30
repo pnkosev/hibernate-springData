@@ -42,8 +42,7 @@ public class AppController implements CommandLineRunner {
 //        this.exportCustomersByBirthDate();
 
         // Query 2
-        List<CarViewDTO> toyotaList = this.carService.getCarsByMake("Toyota");
-        this.parser.objectToJSON(CARS_VIEW_OUTPUT, toyotaList);
+//        this.exportCarsByMake();
 
         System.out.println("yoyo");
     }
@@ -75,5 +74,10 @@ public class AppController implements CommandLineRunner {
     private void exportCustomersByBirthDate() {
         List<CustomerByBirthDateDTO> customers = this.customerService.getAllCustomersOrderedByBirthDate();
         this.parser.objectToJSON(CUSTOMERS_BY_BIRTH_DATE_OUTPUT, customers);
+    }
+
+    private void exportCarsByMake() {
+        List<CarViewDTO> toyotaList = this.carService.getCarsByMake("Toyota");
+        this.parser.objectToJSON(CARS_VIEW_OUTPUT, toyotaList);
     }
 }
