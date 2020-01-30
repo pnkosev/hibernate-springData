@@ -3,11 +3,14 @@ package pn.services.impl;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 import pn.models.dtos.bindings.SupplierDTO;
+import pn.models.dtos.views.SupplierViewDTO;
 import pn.models.entities.Supplier;
 import pn.repositories.SupplierRepository;
 import pn.services.api.SupplierService;
 import pn.utils.api.Parser;
 import pn.utils.api.ValidatorUtils;
+
+import java.util.List;
 
 @Service
 public class SupplierServiceImpl implements SupplierService {
@@ -47,5 +50,10 @@ public class SupplierServiceImpl implements SupplierService {
     @Override
     public Supplier getRandomSupplier() {
         return this.supplierRepository.getRandomSupplier();
+    }
+
+    @Override
+    public List<SupplierViewDTO> getAllNonImportingSuppliers() {
+        return this.supplierRepository.getAllNonImportingSuppliers();
     }
 }

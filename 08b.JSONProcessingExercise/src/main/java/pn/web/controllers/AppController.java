@@ -4,6 +4,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Controller;
 import pn.models.dtos.views.CarViewDTO;
 import pn.models.dtos.views.CustomerByBirthDateDTO;
+import pn.models.dtos.views.SupplierViewDTO;
 import pn.services.api.*;
 import pn.utils.api.Parser;
 
@@ -15,8 +16,10 @@ public class AppController implements CommandLineRunner {
     private final static String PARTS_SEED_PATH = "src/main/resources/json/input/parts.json";
     private final static String CARS_SEED_PATH = "src/main/resources/json/input/cars.json";
     private final static String CUSTOMERS_SEED_PATH = "src/main/resources/json/input/customers.json";
+
     private final static String CUSTOMERS_BY_BIRTH_DATE_OUTPUT = "src/main/resources/json/output/customers-by-birth-date.json";
     private final static String CARS_VIEW_OUTPUT = "src/main/resources/json/output/cars-view.json";
+    private final static String SUPPLIERS_VIEW_OUTPUT = "src/main/resources/json/output/suppliers-view.json";
 
     private final SupplierService supplierService;
     private final PartService partService;
@@ -43,6 +46,10 @@ public class AppController implements CommandLineRunner {
 
         // Query 2
 //        this.exportCarsByMake();
+
+        // Query 3
+        List<SupplierViewDTO> suppliers = this.supplierService.getAllNonImportingSuppliers();
+        this.parser.objectToJSON(SUPPLIERS_VIEW_OUTPUT, suppliers);
 
         System.out.println("yoyo");
     }
