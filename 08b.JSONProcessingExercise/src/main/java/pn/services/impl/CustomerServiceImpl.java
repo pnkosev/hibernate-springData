@@ -10,6 +10,8 @@ import pn.services.api.CustomerService;
 import pn.utils.api.Parser;
 import pn.utils.api.ValidatorUtils;
 
+import java.util.List;
+
 @Service
 public class CustomerServiceImpl implements CustomerService {
 
@@ -45,5 +47,10 @@ public class CustomerServiceImpl implements CustomerService {
                 this.customerRepository.save(customer);
             }
         }
+    }
+
+    @Override
+    public List<Customer> getAllCustomers() {
+        return this.customerRepository.findAll();
     }
 }

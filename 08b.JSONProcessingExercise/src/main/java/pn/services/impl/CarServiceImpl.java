@@ -66,7 +66,11 @@ public class CarServiceImpl implements CarService {
 
                 this.carRepository.save(car);
             }
-
         }
+    }
+
+    @Override
+    public List<Car> getALLCars() {
+        return this.carRepository.findAll();
     }
 }

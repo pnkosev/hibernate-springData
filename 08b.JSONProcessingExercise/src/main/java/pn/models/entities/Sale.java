@@ -16,7 +16,7 @@ public class Sale extends BaseEntity {
     @Column(name = "discount", scale = 2)
     private Double discount;
 
-    @ManyToOne(targetEntity = Car.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne(targetEntity = Car.class)
     @JoinColumn(name = "car_id", referencedColumnName = "id")
     private Car car;
 

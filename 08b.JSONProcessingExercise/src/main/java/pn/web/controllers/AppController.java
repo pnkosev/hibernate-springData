@@ -2,10 +2,7 @@ package pn.web.controllers;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Controller;
-import pn.services.api.CarService;
-import pn.services.api.CustomerService;
-import pn.services.api.PartService;
-import pn.services.api.SupplierService;
+import pn.services.api.*;
 
 @Controller
 public class AppController implements CommandLineRunner {
@@ -18,12 +15,14 @@ public class AppController implements CommandLineRunner {
     private final PartService partService;
     private final CarService carService;
     private final CustomerService customerService;
+    private final SaleService saleService;
 
-    public AppController(SupplierService supplierService, PartService partService, CarService carService, CustomerService customerService) {
+    public AppController(SupplierService supplierService, PartService partService, CarService carService, CustomerService customerService, SaleService saleService) {
         this.supplierService = supplierService;
         this.partService = partService;
         this.carService = carService;
         this.customerService = customerService;
+        this.saleService = saleService;
     }
 
     @Override
@@ -38,6 +37,7 @@ public class AppController implements CommandLineRunner {
         this.seedParts();
         this.seedCars();
         this.seedCustomers();
+        this.seedSales();
     }
 
     private void seedSuppliers() {
@@ -53,4 +53,6 @@ public class AppController implements CommandLineRunner {
     private void seedCustomers() {
         this.customerService.seedMultipleCustomers(CUSTOMERS_SEED_PATH);
     }
+
+    private void seedSales() { this.saleService.seedMultipleSales(); }
 }
