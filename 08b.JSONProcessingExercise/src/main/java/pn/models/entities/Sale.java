@@ -14,13 +14,13 @@ import javax.persistence.*;
 public class Sale extends BaseEntity {
 
     @Column(name = "discount", scale = 2)
-    private Integer discount;
+    private Double discount;
 
     @ManyToOne(targetEntity = Car.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "car_id", referencedColumnName = "id")
     private Car car;
 
-    @ManyToOne(targetEntity = Customer.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @ManyToOne(targetEntity = Customer.class)
     @JoinColumn(name = "customer_id", referencedColumnName = "id")
     private Customer customer;
 }

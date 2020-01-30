@@ -1,6 +1,7 @@
 package pn.config;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,7 +19,10 @@ public class ApplicationConfiguration {
 
     static {
         mapper = new ModelMapper();
-        gson = new Gson();
+        gson = new GsonBuilder()
+                .setPrettyPrinting()
+                .setDateFormat("yyyy-MM-dd'T'hh:mm:ss")
+                .create();;
         validator = Validation.buildDefaultValidatorFactory().getValidator();
         random = new Random();
     }

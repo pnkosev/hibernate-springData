@@ -5,8 +5,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.time.LocalDate;
-import java.util.List;
+import java.util.Date;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -19,11 +19,11 @@ public class Customer extends BaseEntity {
     private String name;
 
     @Column(name = "birth_date")
-    private LocalDate birthDate;
+    private Date birthDate;
 
     @Column(name = "is_young_driver")
     private boolean isYoungDriver;
 
     @OneToMany(mappedBy = "customer", targetEntity = Sale.class, cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<Sale> sales;
+    private Set<Sale> purchases;
 }
