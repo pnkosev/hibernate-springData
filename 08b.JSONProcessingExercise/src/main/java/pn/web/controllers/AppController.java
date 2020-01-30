@@ -48,8 +48,7 @@ public class AppController implements CommandLineRunner {
 //        this.exportCarsByMake();
 
         // Query 3
-        List<SupplierViewDTO> suppliers = this.supplierService.getAllNonImportingSuppliers();
-        this.parser.objectToJSON(SUPPLIERS_VIEW_OUTPUT, suppliers);
+//        this.exportLocalSuppliers();
 
         System.out.println("yoyo");
     }
@@ -86,5 +85,10 @@ public class AppController implements CommandLineRunner {
     private void exportCarsByMake() {
         List<CarViewDTO> toyotaList = this.carService.getCarsByMake("Toyota");
         this.parser.objectToJSON(CARS_VIEW_OUTPUT, toyotaList);
+    }
+
+    private void exportLocalSuppliers() {
+        List<SupplierViewDTO> suppliers = this.supplierService.getAllNonImportingSuppliers();
+        this.parser.objectToJSON(SUPPLIERS_VIEW_OUTPUT, suppliers);
     }
 }
