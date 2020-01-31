@@ -54,6 +54,7 @@ public class AppController implements CommandLineRunner {
 
         // Query 5
         List<CustomerPurchaseViewDTO> allCustomersWithAtLeastOnePurchase = this.customerService.getAllCustomersWithAtLeastOnePurchase();
+        List<CustomerPurchaseViewDTO> customersPurchases = this.customerService.getCustomersPurchases();
 
 
         System.out.println("yoyo");

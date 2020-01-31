@@ -14,4 +14,6 @@ public interface CustomerService {
     List<CustomerByBirthDateDTO> getAllCustomersOrderedByBirthDate();
 
     List<CustomerPurchaseViewDTO> getAllCustomersWithAtLeastOnePurchase();
+
+    List<CustomerPurchaseViewDTO> getCustomersPurchases();
 }
