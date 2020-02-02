@@ -19,6 +19,7 @@ public class AppController implements CommandLineRunner {
     private final static String CARS_VIEW_OUTPUT = "src/main/resources/json/output/cars-view.json";
     private final static String SUPPLIERS_VIEW_OUTPUT = "src/main/resources/json/output/suppliers-view.json";
     private final static String CARS_PARTS_OUTPUT = "src/main/resources/json/output/cars-parts.json";
+    private final static String CUSTOMERS_PURCHASES_OUTPUT = "src/main/resources/json/output/customers-purchases.json";
 
     private final SupplierService supplierService;
     private final PartService partService;
@@ -53,8 +54,7 @@ public class AppController implements CommandLineRunner {
 //        this.exportCarsWithTheirParts();
 
         // Query 5
-        List<CustomerPurchaseViewDTO> allCustomersWithAtLeastOnePurchase = this.customerService.getAllCustomersWithAtLeastOnePurchase();
-        List<CustomerPurchaseViewDTO> customersPurchases = this.customerService.getCustomersPurchases();
+//        this.extractCustomersWithPurchases();
 
 
         System.out.println("yoyo");
@@ -102,5 +102,13 @@ public class AppController implements CommandLineRunner {
     private void exportCarsWithTheirParts() {
         List<CarPartViewDTO> allCarsWithTheirParts = carService.getAllCarsWithTheirParts();
         this.parser.objectToJSON(CARS_PARTS_OUTPUT, allCarsWithTheirParts);
+    }
+
+    private void extractCustomersWithPurchases() {
+        // Solution with creation of DTO directly into the repository, but w/o the discount
+//        List<CustomerPurchaseViewDTO> customersPurchases = this.customerService.getAllCustomersWithAtLeastOnePurchase();
+
+        List<CustomerPurchaseViewDTO> customersPurchases = this.customerService.getCustomersPurchases();
+        this.parser.objectToJSON(CUSTOMERS_PURCHASES_OUTPUT, customersPurchases);
     }
 }
