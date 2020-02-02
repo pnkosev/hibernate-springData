@@ -65,34 +65,6 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-    //    @Override
-//    public void createMultipleUsers(Collection<UserDTO> userDTOs) {
-//        if (this.userRepository.count() == 0) {
-//
-//            for (UserDTO userDTO : userDTOs) {
-//                if (!this.validatorUtil.isValid(userDTO)) {
-//                    this.validatorUtil.getViolations(userDTO).forEach(v -> System.out.println(v.getMessage()));
-//                    continue;
-//                }
-//
-//                User user = mapper.map(userDTO, User.class);
-//                this.userRepository.save(user);
-//            }
-//
-//            List<User> users = this.userRepository.findAll();
-//
-//            for (int i = 0; i < users.size() * 2; i++) {
-//                User randomUser = this.getRandomUser();
-//                User randomFriend = this.getRandomUser();
-//
-//                if (randomUser != null && randomFriend != null && !randomUser.equals(randomFriend)) {
-//                    randomUser.getFriends().add(randomFriend);
-//                    randomFriend.getFriends().add(randomUser);
-//                }
-//            }
-//        }
-//    }
-//
 //    @Override
 //    public List<UserProductSoldDTO> getUsersWithSoldProducts() {
 //        return this.userRepository.findAllByProductsSold()
