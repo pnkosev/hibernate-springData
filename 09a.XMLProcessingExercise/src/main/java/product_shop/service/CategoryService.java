@@ -1,17 +1,11 @@
 package product_shop.service;
 
-import org.springframework.data.jpa.repository.Query;
-import pn.domain.dto.binding.CategoryDTO;
-import pn.domain.dto.view.CategoryProductCountDTO;
-import pn.domain.entity.Category;
-
-import java.util.Collection;
-import java.util.List;
+import product_shop.domain.entity.Category;
 
 public interface CategoryService {
-    void createMultipleCategories(Collection<CategoryDTO> categories);
+//    void createMultipleCategories(Collection<CategoryDTO> categories);
+//
+//    List<CategoryProductCountDTO> getAllByProductCount();
 
     Category getRandomCategory();
-
-    List<CategoryProductCountDTO> getAllByProductCount();
 }

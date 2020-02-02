@@ -1,6 +1,9 @@
 package product_shop.domain.entity;
 
+import org.hibernate.validator.constraints.Length;
+
 import javax.persistence.*;
+import javax.validation.constraints.Min;
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
@@ -31,7 +34,7 @@ public class User extends BaseEntity implements Serializable {
         this.firstName = firstName;
     }
 
-    @Column(name = "last_name")
+    @Column(name = "last_name", nullable = false)
     public String getLastName() {
         return this.lastName;
     }

@@ -56,4 +56,6 @@
 	<user first-name="Marie" last-name="Williamson"/>
 	<user first-name="Wanda" last-name="Harris" age="26"/>
 	<user first-name="Doris" last-name="Cook" age="61"/>
+	<user first-name="Doris" last-name="Co" age="61"/>
+	<user first-name="Doris" last-name="Cook" age="15"/>
 </users>
