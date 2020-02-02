@@ -19,7 +19,7 @@ import java.math.BigDecimal;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@XmlRootElement("product")
+@XmlRootElement(name = "product")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ProductDTO implements Serializable {
 

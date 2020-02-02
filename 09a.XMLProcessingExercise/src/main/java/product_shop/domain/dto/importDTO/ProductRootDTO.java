@@ -16,9 +16,9 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@XmlRootElement("products")
+@XmlRootElement(name = "products")
 @XmlAccessorType(XmlAccessType.FIELD)
 public class ProductRootDTO implements Serializable {
-    @XmlElement("product")
+    @XmlElement(name = "product")
     List<ProductDTO> productDTOS;
 }

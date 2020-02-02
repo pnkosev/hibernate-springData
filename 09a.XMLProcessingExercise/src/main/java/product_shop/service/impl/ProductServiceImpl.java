@@ -10,9 +10,6 @@ import product_shop.service.UserService;
 import product_shop.util.ValidatorUtil;
 
 import javax.transaction.Transactional;
-import java.math.BigDecimal;
-import java.util.*;
-import java.util.stream.Collectors;
 
 @Transactional
 @Service
@@ -36,7 +33,11 @@ public class ProductServiceImpl implements ProductService {
         this.validator = validator;
     }
 
-//    @Override
+    @Override
+    public void createMultipleProducts() {
+    }
+
+    //    @Override
 //    public void createMultipleProducts(Collection<ProductDTO> productDTOs) {
 //        if (this.productRepository.count() == 0) {
 //            List<ProductDTO> validDTOs = new ArrayList<>();
