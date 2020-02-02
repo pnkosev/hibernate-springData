@@ -20,6 +20,7 @@ public class AppController implements CommandLineRunner {
     private final static String SUPPLIERS_VIEW_OUTPUT = "src/main/resources/json/output/suppliers-view.json";
     private final static String CARS_PARTS_OUTPUT = "src/main/resources/json/output/cars-parts.json";
     private final static String CUSTOMERS_PURCHASES_OUTPUT = "src/main/resources/json/output/customers-purchases.json";
+    private final static String SALES_WITH_DETAILS_OUTPUT = "src/main/resources/json/output/sales-with-details.json";
 
     private final SupplierService supplierService;
     private final PartService partService;
@@ -56,6 +57,8 @@ public class AppController implements CommandLineRunner {
         // Query 5
 //        this.extractCustomersWithPurchases();
 
+        // Query 6
+        this.extractSalesWithDetails();
 
         System.out.println("yoyo");
     }
@@ -110,5 +113,10 @@ public class AppController implements CommandLineRunner {
 
         List<CustomerPurchaseViewDTO> customersPurchases = this.customerService.getCustomersPurchases();
         this.parser.objectToJSON(CUSTOMERS_PURCHASES_OUTPUT, customersPurchases);
+    }
+
+    private void extractSalesWithDetails() {
+        List<SaleDetailedViewDTO> sales = this.saleService.getAllSalesWithDetails();
+        this.parser.objectToJSON(SALES_WITH_DETAILS_OUTPUT, sales);
     }
 }

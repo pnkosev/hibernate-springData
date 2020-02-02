@@ -1,18 +1,25 @@
 package pn.services.impl;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import pn.models.dtos.views.CarViewNoIdDTO;
+import pn.models.dtos.views.SaleDetailedViewDTO;
 import pn.models.entities.Car;
 import pn.models.entities.Customer;
+import pn.models.entities.Part;
 import pn.models.entities.Sale;
 import pn.repositories.SaleRepository;
 import pn.services.api.CarService;
 import pn.services.api.CustomerService;
 import pn.services.api.SaleService;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
 
 @Service
 public class SaleServiceImpl implements SaleService {
@@ -20,12 +27,14 @@ public class SaleServiceImpl implements SaleService {
     private final SaleRepository saleRepository;
     private final CarService carService;
     private final CustomerService customerService;
+    private final ModelMapper mapper;
 
     @Autowired
-    public SaleServiceImpl(SaleRepository saleRepository, CarService carService, CustomerService customerService) {
+    public SaleServiceImpl(SaleRepository saleRepository, CarService carService, CustomerService customerService, ModelMapper mapper) {
         this.saleRepository = saleRepository;
         this.carService = carService;
         this.customerService = customerService;
+        this.mapper = mapper;
     }
 
     @Override
@@ -45,5 +54,33 @@ public class SaleServiceImpl implements SaleService {
                 this.saleRepository.save(sale);
             }
         }
+    }
+
+    @Override
+    public List<SaleDetailedViewDTO> getAllSalesWithDetails() {
+        return this.saleRepository.getAllSalesWithDetails()
+                .stream()
+                .map(s -> {
+                    SaleDetailedViewDTO saleView = new SaleDetailedViewDTO();
+                    CarViewNoIdDTO carViewNoIdDTO = this.mapper.map(s.getCar(), CarViewNoIdDTO.class);
+
+                    saleView.setCarViewNoIdDTO(carViewNoIdDTO);
+                    saleView.setCustomerName(s.getCustomer().getName());
+
+                    Double discount = s.getDiscount();
+
+                    saleView.setDiscount(discount);
+
+                    BigDecimal price = s.getCar().getParts()
+                            .stream()
+                            .map(Part::getPrice)
+                            .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+                    saleView.setPrice(price);
+
+                    saleView.setPriceWithDiscount(price.subtract(price.multiply(BigDecimal.valueOf(discount))));
+                    return saleView;
+                })
+                .collect(Collectors.toList());
     }
 }
