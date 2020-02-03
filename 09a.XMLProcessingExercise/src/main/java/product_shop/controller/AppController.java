@@ -2,15 +2,21 @@ package product_shop.controller;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Controller;
+import product_shop.service.CategoryService;
+import product_shop.service.ProductService;
 import product_shop.service.UserService;
 
 @Controller
 public class AppController implements CommandLineRunner {
 
     private final UserService userService;
+    private final CategoryService categoryService;
+    private final ProductService productService;
 
-    public AppController(UserService userService) {
+    public AppController(UserService userService, CategoryService categoryService, ProductService productService) {
         this.userService = userService;
+        this.categoryService = categoryService;
+        this.productService = productService;
     }
 
     @Override
@@ -22,17 +28,19 @@ public class AppController implements CommandLineRunner {
 
     private void seedDatabase() {
         this.seedUsers();
-        this.seedProducts();
         this.seedCategories();
+        this.seedProducts();
     }
 
     private void seedUsers() {
         this.userService.createMultipleUsers();
     }
 
-    private void seedProducts() {
+    private void seedCategories() {
+        this.categoryService.createMultipleCategories();
     }
 
-    private void seedCategories() {
+    private void seedProducts() {
+        this.productService.createMultipleProducts();
     }
 }
