@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<products>
+    <product name="equaline" price="520.45" sellerFullName="Brandon Fuller"/>
+    <product name="Propranolol Hydrochloride" price="546.95" sellerFullName="Mitchell"/>
+    <product name="Prednisone" price="550.72" sellerFullName="Fred Allen"/>
+    <product name="TERSI" price="554.91" sellerFullName="Clarence Fowler"/>
+    <product name="PLANTAGO LANCEOLATA POLLEN" price="561.68" sellerFullName="Sarah Day"/>
+    <product name="AIR" price="581.69" sellerFullName="Amanda Frazier"/>
+    <product name="Gemcitabine" price="594.79" sellerFullName="Mitchell"/>
+    <product name="Pleo Ginkgo" price="613.65" sellerFullName="Mitchell"/>
+    <product name="Diastat" price="614.14" sellerFullName="Bonnie Fox"/>
+    <product name="No7 Protect and Perfect Foundation Sunscreen Broad Spectrum SPF 15 Cool Ivory" price="616.19" sellerFullName="Fox"/>
+    <product name="Foaming Hand Sanitizer" price="624.72" sellerFullName="Thomas Snyder"/>
+    <product name="Imipramine Hydrochloride" price="648.69" sellerFullName="Bennett"/>
+    <product name="Childrens Allegra Allergy" price="650.97" sellerFullName="Gary Stevens"/>
+    <product name="Amitiza" price="666.58" sellerFullName="Joshua Murray"/>
+    <product name="Acnezzol Base" price="710.60" sellerFullName="Harrison"/>
+    <product name="Prostate" price="716.05" sellerFullName="Brenda Howell"/>
+    <product name="Pleo Lat" price="720.08" sellerFullName="Brenda Howell"/>
+    <product name="Pollens - Weeds and Garden Plants, Nettle Urtica dioica" price="782.77" sellerFullName="Anna Clark"/>
+    <product name="Meloxicam" price="809.18" sellerFullName="Harrison"/>
+    <product name="Azithromycin" price="813.87" sellerFullName="Brenda Howell"/>
+    <product name="Moore Medical Sinus Pain and Pressure Relief" price="855.39" sellerFullName="Marie Williamson"/>
+    <product name="Shopko Lip Treatment" price="861.42" sellerFullName="Gloria Alexander"/>
+    <product name="ESIKA" price="879.37" sellerFullName="Patrick King"/>
+    <product name="Care One Hemorrhoidal" price="932.18" sellerFullName="Patricia Cooper"/>
+    <product name="pain relief" price="938.23" sellerFullName="Christine Gomez"/>
+    <product name="Glipizide and Metformin Hydrochloride" price="953.60" sellerFullName="Anna Parker"/>
+    <product name="NEO-POLY-BAC HYDRO" price="967.32" sellerFullName="Patricia Fuller"/>
+    <product name="Clearskin" price="968.59" sellerFullName="Benjamin Henry"/>
+    <product name="Megestrol Acetate" price="976.15" sellerFullName="Eugene Stewart"/>
+</products>

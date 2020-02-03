@@ -1,7 +1,11 @@
 package product_shop.service;
 
+import product_shop.domain.dto.exportDTO.ProductInRangeRootDTO;
+
 public interface ProductService {
     void createMultipleProducts();
 
-//    List<ProductSellerDTO> getAllByPriceBetween500And1000WithoutBuyerOrderedByPrice();
+    ProductInRangeRootDTO getAllByPriceBetween500And1000WithoutBuyerOrderedByPrice();
+
+    void exportProductsInRange();
 }

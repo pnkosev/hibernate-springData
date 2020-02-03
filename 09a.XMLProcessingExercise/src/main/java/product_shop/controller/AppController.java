@@ -2,6 +2,7 @@ package product_shop.controller;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Controller;
+import product_shop.domain.dto.exportDTO.ProductInRangeRootDTO;
 import product_shop.service.CategoryService;
 import product_shop.service.ProductService;
 import product_shop.service.UserService;
@@ -23,6 +24,9 @@ public class AppController implements CommandLineRunner {
     public void run(String... args) throws Exception {
         this.seedDatabase();
 
+        // Query 1
+        this.exportProductsInRange();
+
         System.out.println("yoyo");
     }
 
@@ -42,5 +46,9 @@ public class AppController implements CommandLineRunner {
 
     private void seedProducts() {
         this.productService.createMultipleProducts();
+    }
+
+    private void exportProductsInRange() {
+        this.productService.exportProductsInRange();
     }
 }

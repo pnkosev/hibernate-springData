@@ -18,7 +18,7 @@ import java.util.List;
 @Transactional
 @Service
 public class UserServiceImpl implements UserService {
-    private static final String USERS_IMPORT_PATH = "src/main/resources/json/input/users.xml";
+    private static final String USERS_IMPORT_PATH = "src/main/resources/xml/input/users.xml";
 
     private final UserRepository userRepository;
     private final ModelMapper mapper;

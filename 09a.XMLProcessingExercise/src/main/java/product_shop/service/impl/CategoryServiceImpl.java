@@ -17,7 +17,7 @@ import javax.transaction.Transactional;
 @Service
 public class CategoryServiceImpl implements CategoryService {
 
-    private final static String CATEGORIES_XML_INPUT_PATH = "src/main/resources/json/input/categories.xml";
+    private final static String CATEGORIES_XML_INPUT_PATH = "src/main/resources/xml/input/categories.xml";
 
     private final ModelMapper mapper;
     private final CategoryRepository categoryRepository;
