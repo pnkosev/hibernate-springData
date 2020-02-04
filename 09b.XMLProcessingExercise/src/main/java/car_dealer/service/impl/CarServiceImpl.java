@@ -25,7 +25,7 @@ public class CarServiceImpl implements CarService {
     }
 
     @Override
-    public void seedMultipleCars(String path) {
+    public void seedMultipleCarsFromXML() {
 
     }
 }

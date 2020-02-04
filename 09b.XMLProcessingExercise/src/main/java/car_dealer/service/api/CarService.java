@@ -3,7 +3,7 @@ package car_dealer.service.api;
 import java.util.List;
 
 public interface CarService {
-    void seedMultipleCars(String path);
+    void seedMultipleCarsFromXML();
 
 //    List<Car> getALLCars();
 //

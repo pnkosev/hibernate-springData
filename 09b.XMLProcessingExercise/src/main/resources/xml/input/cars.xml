@@ -1790,4 +1790,9 @@
     <model>Logan</model>
     <travelled-distance>213647</travelled-distance>
   </car>
+  <car>
+    <make>Dacia</make>
+    <model>Logan</model>
+    <travelled-distance>-1</travelled-distance>
+  </car>
 </cars>

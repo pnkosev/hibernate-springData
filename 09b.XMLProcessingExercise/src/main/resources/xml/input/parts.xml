@@ -131,4 +131,7 @@
   <part name="Differential seal" price="109.99" quantity="10" />
   <part name="Differential clutch" price="120.99" quantity="10" />
   <part name="Clutch shoe" price="10.49" quantity="10" />
+  <part name="Cl" price="10.49" quantity="10" />
+  <part name="Clutch shoe" price="-10.49" quantity="10" />
+  <part name="Clutch shoe" price="10.49" quantity="-10" />
 </parts>
