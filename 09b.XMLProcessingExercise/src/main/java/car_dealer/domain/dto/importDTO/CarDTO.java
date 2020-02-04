@@ -26,7 +26,7 @@ public class CarDTO implements Serializable {
     private String make;
 
     @NotNull(message = "Car's model cannot be null!")
-    @XmlElement(name = "mode;")
+    @XmlElement(name = "model")
     private String model;
 
     @NotNull(message = "Car's travelled distance cannot be null!")
