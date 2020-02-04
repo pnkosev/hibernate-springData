@@ -2,6 +2,7 @@ package product_shop.controller;
 
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Controller;
+import product_shop.domain.dto.exportDTO.CategoriesByProductRootDTO;
 import product_shop.domain.dto.exportDTO.ProductInRangeRootDTO;
 import product_shop.domain.dto.exportDTO.UserWithSoldProductRootDTO;
 import product_shop.service.CategoryService;
@@ -32,7 +33,7 @@ public class AppController implements CommandLineRunner {
 //        this.exportUsersWithProductsSold();
 
         // Query 3
-        
+        this.exportCategoriesByProductCount();
 
         System.out.println("yoyo");
     }
@@ -61,5 +62,9 @@ public class AppController implements CommandLineRunner {
 
     private void exportUsersWithProductsSold() {
         this.userService.exportUsersWithSoldProducts();
+    }
+
+    private void exportCategoriesByProductCount() {
+        this.categoryService.exportCategoriesByProductCount();
     }
 }
