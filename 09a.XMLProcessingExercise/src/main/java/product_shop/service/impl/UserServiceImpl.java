@@ -3,9 +3,7 @@ package product_shop.service.impl;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import product_shop.domain.dto.exportDTO.ProductNamePriceBuyerFirstLastNameDTO;
-import product_shop.domain.dto.exportDTO.UserWithSoldProductDTO;
-import product_shop.domain.dto.exportDTO.UserWithSoldProductRootDTO;
+import product_shop.domain.dto.exportDTO.*;
 import product_shop.domain.dto.importDTO.UserDTO;
 import product_shop.domain.dto.importDTO.UserRootDTO;
 import product_shop.domain.entity.Product;
@@ -25,6 +23,7 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements UserService {
     private static final String USERS_IMPORT_PATH = "src/main/resources/xml/input/users.xml";
     private static final String USERS_WITH_SALES_EXPORT_PATH = "src/main/resources/xml/output/users-with-sales.xml";
+    private static final String USERS_AND_PRODUCTS_EXPORT_PATH = "src/main/resources/xml/output/users-and-products.xml";
 
     private final UserRepository userRepository;
     private final ModelMapper mapper;
@@ -37,6 +36,11 @@ public class UserServiceImpl implements UserService {
         this.mapper = mapper;
         this.validatorUtil = validatorUtil;
         this.xmlParser = xmlParser;
+    }
+
+    @Override
+    public User getRandomUser() {
+        return this.userRepository.getRandomEntity();
     }
 
     @Override
@@ -99,69 +103,44 @@ public class UserServiceImpl implements UserService {
         this.xmlParser.toXML(this.getUsersWithSoldProducts(), USERS_WITH_SALES_EXPORT_PATH);
     }
 
-    //    @Override
-//    public UserWithSoldProductRootDTO getUsersWithSoldProducts() {
-//        UserWithSoldProductRootDTO userList = new UserWithSoldProductRootDTO();
-//
-//        List<UserWithSoldProductDTO> users = this.userRepository.findAllByProductsSold()
-//                .stream()
-//                .map(u -> {
-//                    UserWithSoldProductDTO user = mapper.map(u, UserWithSoldProductDTO.class);
-//                    for (Product product : u.getProductsSold()) {
-//                        ProductNamePriceBuyerFirstLastNameDTO productDTO = this.mapper.map(product, ProductNamePriceBuyerFirstLastNameDTO.class);
-//                        user.getProductsSold().add(productDTO);
-//                    }
-//                    return user;
-//                })
-//                .collect(Collectors.toList());
-//
-//        userList.setUsers(users);
-//
-//        return userList;
-//    }
+    @Override
+    public UsersAndProductsRootDTO getSellsByUser() {
+        List<UserFirstLastNameAgeDTO> userFirstLastNameAgeDTOs = this.userRepository.findAllByProductsSold()
+                .stream()
+                .map(u -> {
+                    UserFirstLastNameAgeDTO userDTO = this.mapper.map(u, UserFirstLastNameAgeDTO.class);
 
-//    @Override
-//    public UserCountDTO getSellsByUser() {
-//        List<User> users = this.userRepository.findAllByProductsSold();
-//
-//        Set<UserProductSoldDetailedDTO> usersDetails = users
-//                .stream()
-//                .map(u -> {
-//                    UserProductSoldDetailedDTO userDetails = mapper.map(u, UserProductSoldDetailedDTO.class);
-//
-//                    ProductCountDTO productCountDTO = new ProductCountDTO();
-//                    productCountDTO.setCount(u.getProductsSold().size());
-//
-//                    Set<ProductNamePriceDTO> productsWithNameAndPrice = u.getProductsSold()
-//                            .stream()
-//                            .map(product -> mapper.map(product, ProductNamePriceDTO.class))
-//                            .collect(Collectors.toSet());
-//
-//                    productCountDTO.setProducts(productsWithNameAndPrice);
-//
-//                    userDetails.setSoldProducts(productCountDTO);
-//
-//                    return userDetails;
-//                })
-//                .sorted((u1, u2) -> {
-//                    int comp = u2.getSoldProducts().getCount() - u1.getSoldProducts().getCount();
-//                    if (comp == 0) {
-//                        comp = u1.getLastName().compareTo(u2.getLastName());
-//                    }
-//                    return comp;
-//                })
-//                .collect(Collectors.toCollection(LinkedHashSet::new));
-//
-//        UserCountDTO userCountDTO = new UserCountDTO();
-//
-//        userCountDTO.setCount(usersDetails.size());
-//        userCountDTO.setUsers(usersDetails);
-//
-//        return userCountDTO;
-//    }
+                    List<ProductNamePriceDTO> productNamePriceDTOs = u.getProductsSold()
+                            .stream()
+                            .filter(p -> p.getBuyer() != null)
+                            .map(p -> this.mapper.map(p, ProductNamePriceDTO.class))
+                            .collect(Collectors.toList());
+
+                    SoldProductsDTO soldProductsDTO = new SoldProductsDTO();
+                    soldProductsDTO.setSoldProducts(productNamePriceDTOs);
+                    soldProductsDTO.setCount(productNamePriceDTOs.size());
+                    userDTO.setSoldProducts(soldProductsDTO);
+                    return userDTO;
+                })
+                .sorted((u1, u2) -> {
+                    int comp = Integer.compare(u2.getSoldProducts().getCount(), u1.getSoldProducts().getCount());
+                    if (comp == 0) {
+                        comp = u1.getLastName().compareTo(u2.getLastName());
+                    }
+                    return comp;
+                })
+                .collect(Collectors.toList());
+
+        UsersAndProductsRootDTO usersAndProductsRootDTO = new UsersAndProductsRootDTO();
+
+        usersAndProductsRootDTO.setUsers(userFirstLastNameAgeDTOs);
+        usersAndProductsRootDTO.setCount(userFirstLastNameAgeDTOs.size());
+
+        return usersAndProductsRootDTO;
+    }
 
     @Override
-    public User getRandomUser() {
-        return this.userRepository.getRandomEntity();
+    public void exportUsersAndProductsSold() {
+        this.xmlParser.toXML(this.getSellsByUser(), USERS_AND_PRODUCTS_EXPORT_PATH);
     }
 }
