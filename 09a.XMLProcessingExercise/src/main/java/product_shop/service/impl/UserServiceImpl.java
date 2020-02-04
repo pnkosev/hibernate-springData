@@ -3,8 +3,12 @@ package product_shop.service.impl;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import product_shop.domain.dto.exportDTO.ProductNamePriceBuyerFirstLastNameDTO;
+import product_shop.domain.dto.exportDTO.UserWithSoldProductDTO;
+import product_shop.domain.dto.exportDTO.UserWithSoldProductRootDTO;
 import product_shop.domain.dto.importDTO.UserDTO;
 import product_shop.domain.dto.importDTO.UserRootDTO;
+import product_shop.domain.entity.Product;
 import product_shop.domain.entity.User;
 import product_shop.repository.UserRepository;
 import product_shop.service.UserService;
@@ -14,11 +18,13 @@ import product_shop.util.XMLParser;
 import javax.transaction.Transactional;
 import javax.validation.Validator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Transactional
 @Service
 public class UserServiceImpl implements UserService {
     private static final String USERS_IMPORT_PATH = "src/main/resources/xml/input/users.xml";
+    private static final String USERS_WITH_SALES_EXPORT_PATH = "src/main/resources/xml/output/users-with-sales.xml";
 
     private final UserRepository userRepository;
     private final ModelMapper mapper;
@@ -65,14 +71,55 @@ public class UserServiceImpl implements UserService {
         }
     }
 
-//    @Override
-//    public List<UserProductSoldDTO> getUsersWithSoldProducts() {
-//        return this.userRepository.findAllByProductsSold()
-//                .stream()
-//                .map(u -> mapper.map(u, UserProductSoldDTO.class))
-//                .collect(Collectors.toList());
-//    }
+    @Override
+    public UserWithSoldProductRootDTO getUsersWithSoldProducts() {
+        UserWithSoldProductRootDTO users = new UserWithSoldProductRootDTO();
+
+        List<UserWithSoldProductDTO> userList = this.userRepository.findAllByProductsSold()
+                .stream()
+                .map(u -> {
+                    UserWithSoldProductDTO userWithSoldProductDTO = this.mapper.map(u, UserWithSoldProductDTO.class);
+                    List<ProductNamePriceBuyerFirstLastNameDTO> products = userWithSoldProductDTO
+                            .getProductsSold()
+                            .stream()
+                            .filter(f -> f.getBuyerLastName() != null)
+                            .collect(Collectors.toList());
+                    userWithSoldProductDTO.setProductsSold(products);
+                    return userWithSoldProductDTO;
+                })
+                .collect(Collectors.toList());
+
+        users.setUsers(userList);
+
+        return users;
+    }
+
+    @Override
+    public void exportUsersWithSoldProducts() {
+        this.xmlParser.toXML(this.getUsersWithSoldProducts(), USERS_WITH_SALES_EXPORT_PATH);
+    }
+
+    //    @Override
+//    public UserWithSoldProductRootDTO getUsersWithSoldProducts() {
+//        UserWithSoldProductRootDTO userList = new UserWithSoldProductRootDTO();
 //
+//        List<UserWithSoldProductDTO> users = this.userRepository.findAllByProductsSold()
+//                .stream()
+//                .map(u -> {
+//                    UserWithSoldProductDTO user = mapper.map(u, UserWithSoldProductDTO.class);
+//                    for (Product product : u.getProductsSold()) {
+//                        ProductNamePriceBuyerFirstLastNameDTO productDTO = this.mapper.map(product, ProductNamePriceBuyerFirstLastNameDTO.class);
+//                        user.getProductsSold().add(productDTO);
+//                    }
+//                    return user;
+//                })
+//                .collect(Collectors.toList());
+//
+//        userList.setUsers(users);
+//
+//        return userList;
+//    }
+
 //    @Override
 //    public UserCountDTO getSellsByUser() {
 //        List<User> users = this.userRepository.findAllByProductsSold();

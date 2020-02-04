@@ -1,5 +1,6 @@
 package product_shop.service;
 
+import product_shop.domain.dto.exportDTO.UserWithSoldProductRootDTO;
 import product_shop.domain.entity.User;
 
 import java.util.Collection;
@@ -10,7 +11,9 @@ public interface UserService {
 
     void createMultipleUsers();
 
-//    List<UserProductSoldDTO> getUsersWithSoldProducts();
-//
+    UserWithSoldProductRootDTO getUsersWithSoldProducts();
+
+    void exportUsersWithSoldProducts();
+
 //    UserCountDTO getSellsByUser();
 }
