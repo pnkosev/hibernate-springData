@@ -1,5 +1,7 @@
 package car_dealer.service.impl;
 
+import car_dealer.domain.dto.exportDTO.CarFromMakeDTO;
+import car_dealer.domain.dto.exportDTO.CarFromMakeRootDTO;
 import car_dealer.domain.dto.importDTO.CarDTO;
 import car_dealer.domain.dto.importDTO.CarRootDTO;
 import car_dealer.domain.entity.Car;
@@ -16,10 +18,12 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Random;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class CarServiceImpl implements CarService {
     private static final String CARS_XML_INPUT_PATH = "src/main/resources/xml/input/cars.xml";
+    private static final String CARS_BY_MAKE_XML_EXPORT_PATH = "src/main/resources/xml/output/cars-by-make.xml";
 
     private final XMLParser xmlParser;
     private final ModelMapper mapper;
@@ -68,5 +72,24 @@ public class CarServiceImpl implements CarService {
                 this.carRepository.save(car);
             }
         }
+    }
+
+    @Override
+    public CarFromMakeRootDTO getCarsByMake(String make) {
+        CarFromMakeRootDTO carFromMakeRootDTO = new CarFromMakeRootDTO();
+
+        List<CarFromMakeDTO> cars = this.carRepository.findAllByMakeOrderByModelAscTravelledDistanceDesc(make)
+                .stream()
+                .map(c -> this.mapper.map(c, CarFromMakeDTO.class))
+                .collect(Collectors.toList());
+
+        carFromMakeRootDTO.setCars(cars);
+
+        return carFromMakeRootDTO;
+    }
+
+    @Override
+    public void exportCarsByMake(String make) {
+        this.xmlParser.toXML(getCarsByMake(make), CARS_BY_MAKE_XML_EXPORT_PATH);
     }
 }

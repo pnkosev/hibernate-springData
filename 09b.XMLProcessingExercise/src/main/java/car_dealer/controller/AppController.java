@@ -27,7 +27,10 @@ public class AppController implements CommandLineRunner {
         this.seedDatabase();
 
         // Query 1
-        this.exportOrderedCustomers();
+//        this.exportOrderedCustomers();
+
+        // Query 2
+//        this.exportCarsByMake("Toyota");
 
         System.out.println("yoyo");
     }
@@ -55,4 +58,6 @@ public class AppController implements CommandLineRunner {
     private void seedSales() { this.saleService.seedMultipleSales(); }
 
     private void exportOrderedCustomers() { this.customerService.exportOrderedCustomers(); }
+
+    private void exportCarsByMake(String make) { this.carService.exportCarsByMake(make); }
 }
