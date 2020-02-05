@@ -1,9 +1,7 @@
 package car_dealer.service.api;
 
-import java.util.List;
-
 public interface CustomerService {
-    void seedMultipleCustomers(String path);
+    void seedMultipleCustomersFromXML();
 
 //    List<Customer> getAllCustomers();
 //
