@@ -1,9 +1,11 @@
 package car_dealer.service.api;
 
+import car_dealer.domain.dto.exportDTO.SupplierLocalRootDTO;
+
 public interface SupplierService {
     void seedMultipleSuppliersFromXML();
 
-//    Supplier getRandomSupplier();
-//
-//    List<SupplierViewDTO> getAllNonImportingSuppliers();
+    SupplierLocalRootDTO getAllLocalSuppliers();
+
+    void exportLocalSuppliers();
 }
