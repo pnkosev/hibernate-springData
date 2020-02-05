@@ -1,7 +1,6 @@
 package car_dealer.service.impl;
 
-import car_dealer.domain.dto.exportDTO.CarFromMakeDTO;
-import car_dealer.domain.dto.exportDTO.CarFromMakeRootDTO;
+import car_dealer.domain.dto.exportDTO.*;
 import car_dealer.domain.dto.importDTO.CarDTO;
 import car_dealer.domain.dto.importDTO.CarRootDTO;
 import car_dealer.domain.entity.Car;
@@ -24,6 +23,7 @@ import java.util.stream.Collectors;
 public class CarServiceImpl implements CarService {
     private static final String CARS_XML_INPUT_PATH = "src/main/resources/xml/input/cars.xml";
     private static final String CARS_BY_MAKE_XML_EXPORT_PATH = "src/main/resources/xml/output/cars-by-make.xml";
+    private static final String CARS_WITH_PARTS_XML_EXPORT_PATH = "src/main/resources/xml/output/cars-with-parts.xml";
 
     private final XMLParser xmlParser;
     private final ModelMapper mapper;
@@ -91,5 +91,25 @@ public class CarServiceImpl implements CarService {
     @Override
     public void exportCarsByMake(String make) {
         this.xmlParser.toXML(getCarsByMake(make), CARS_BY_MAKE_XML_EXPORT_PATH);
+    }
+
+    @Override
+    public CarWithPartsRootDTO getAllCarsWithTheirParts() {
+        CarWithPartsRootDTO carWithPartsRootDTO = new CarWithPartsRootDTO();
+
+        List<CarWithPartsDTO> carWithPartsDTOs = this.carRepository.findAll()
+                .stream()
+                .map(c -> this.mapper.map(c, CarWithPartsDTO.class))
+                .collect(Collectors.toList());
+
+        carWithPartsRootDTO.setCars(carWithPartsDTOs);
+
+        return carWithPartsRootDTO;
+    }
+
+    @Override
+    public void exportCarsWithTheirParts() {
+        CarWithPartsRootDTO cars = this.getAllCarsWithTheirParts();
+        this.xmlParser.toXML(cars, CARS_WITH_PARTS_XML_EXPORT_PATH);
     }
 }

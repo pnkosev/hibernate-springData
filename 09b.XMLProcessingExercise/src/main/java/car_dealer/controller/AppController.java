@@ -33,7 +33,10 @@ public class AppController implements CommandLineRunner {
 //        this.exportCarsByMake("Toyota");
 
         // Query 3
-        this.exportLocalSuppliers();
+//        this.exportLocalSuppliers();
+
+        // Query 4
+//        this.exportCarsWithParts();
 
         System.out.println("yoyo");
     }
@@ -65,4 +68,6 @@ public class AppController implements CommandLineRunner {
     private void exportCarsByMake(String make) { this.carService.exportCarsByMake(make); }
 
     private void exportLocalSuppliers() { this.supplierService.exportLocalSuppliers(); }
+
+    private void exportCarsWithParts() { this.carService.exportCarsWithTheirParts(); }
 }
