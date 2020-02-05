@@ -1,6 +1,7 @@
 package car_dealer.service.api;
 
 import car_dealer.domain.dto.exportDTO.CustomerOrderedRootDTO;
+import car_dealer.domain.dto.exportDTO.CustomerPurchaseRootDTO;
 
 public interface CustomerService {
     void seedMultipleCustomersFromXML();
@@ -9,7 +10,9 @@ public interface CustomerService {
 
     void exportOrderedCustomers();
 
-//    List<CustomerPurchaseViewDTO> getAllCustomersWithAtLeastOnePurchase();
-//
+    CustomerPurchaseRootDTO getAllCustomersWithAtLeastOnePurchase();
+
+    void exportCustomersWithPurchases();
+
 //    List<CustomerPurchaseViewDTO> getCustomersPurchases();
 }

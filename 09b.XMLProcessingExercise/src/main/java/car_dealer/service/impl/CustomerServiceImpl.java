@@ -2,6 +2,8 @@ package car_dealer.service.impl;
 
 import car_dealer.domain.dto.exportDTO.CustomerOrderedDTO;
 import car_dealer.domain.dto.exportDTO.CustomerOrderedRootDTO;
+import car_dealer.domain.dto.exportDTO.CustomerPurchaseDTO;
+import car_dealer.domain.dto.exportDTO.CustomerPurchaseRootDTO;
 import car_dealer.domain.dto.importDTO.CustomerDTO;
 import car_dealer.domain.dto.importDTO.CustomerRootDTO;
 import car_dealer.domain.entity.Customer;
@@ -20,6 +22,7 @@ import java.util.stream.Collectors;
 public class CustomerServiceImpl implements CustomerService {
     private static final String CUSTOMERS_XML_IMPORT_PATH = "src/main/resources/xml/input/customers.xml";
     private static final String CUSTOMERS_ORDERED_XML_OUTPUT_PATH = "src/main/resources/xml/output/customers-ordered.xml";
+    private static final String CUSTOMERS_WITH_PURCHASES_XML_OUTPUT_PATH = "src/main/resources/xml/output/customers-with-purchases.xml";
 
     private final XMLParser xmlParser;
     private final ModelMapper mapper;
@@ -72,5 +75,21 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     public void exportOrderedCustomers() {
         this.xmlParser.toXML(getAllCustomersOrderedByBirthDate(), CUSTOMERS_ORDERED_XML_OUTPUT_PATH);
+    }
+
+    @Override
+    public CustomerPurchaseRootDTO getAllCustomersWithAtLeastOnePurchase() {
+        CustomerPurchaseRootDTO customerPurchaseRootDTO = new CustomerPurchaseRootDTO();
+
+        List<CustomerPurchaseDTO> customersWithPurchaseDTOs = this.customerRepository.findAllCustomersWithAtLeastOnePurchase();
+
+        customerPurchaseRootDTO.setCustomers(customersWithPurchaseDTOs);
+
+        return customerPurchaseRootDTO;
+    }
+
+    @Override
+    public void exportCustomersWithPurchases() {
+        this.xmlParser.toXML(getAllCustomersWithAtLeastOnePurchase(), CUSTOMERS_WITH_PURCHASES_XML_OUTPUT_PATH);
     }
 }
