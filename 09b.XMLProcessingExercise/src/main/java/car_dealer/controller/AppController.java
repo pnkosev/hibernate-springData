@@ -26,7 +26,8 @@ public class AppController implements CommandLineRunner {
     public void run(String... args) throws Exception {
         this.seedDatabase();
 
-
+        // Query 1
+        this.exportOrderedCustomers();
 
         System.out.println("yoyo");
     }
@@ -52,4 +53,6 @@ public class AppController implements CommandLineRunner {
     private void seedCustomers() { this.customerService.seedMultipleCustomersFromXML(); }
 
     private void seedSales() { this.saleService.seedMultipleSales(); }
+
+    private void exportOrderedCustomers() { this.customerService.exportOrderedCustomers(); }
 }

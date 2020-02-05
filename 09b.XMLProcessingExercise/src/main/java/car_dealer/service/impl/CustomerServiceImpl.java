@@ -1,5 +1,7 @@
 package car_dealer.service.impl;
 
+import car_dealer.domain.dto.exportDTO.CustomerOrderedDTO;
+import car_dealer.domain.dto.exportDTO.CustomerOrderedRootDTO;
 import car_dealer.domain.dto.importDTO.CustomerDTO;
 import car_dealer.domain.dto.importDTO.CustomerRootDTO;
 import car_dealer.domain.entity.Customer;
@@ -11,9 +13,13 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class CustomerServiceImpl implements CustomerService {
     private static final String CUSTOMERS_XML_IMPORT_PATH = "src/main/resources/xml/input/customers.xml";
+    private static final String CUSTOMERS_ORDERED_XML_OUTPUT_PATH = "src/main/resources/xml/output/customers-ordered.xml";
 
     private final XMLParser xmlParser;
     private final ModelMapper mapper;
@@ -47,5 +53,24 @@ public class CustomerServiceImpl implements CustomerService {
                 this.customerRepository.save(customer);
             }
         }
+    }
+
+    @Override
+    public CustomerOrderedRootDTO getAllCustomersOrderedByBirthDate() {
+        CustomerOrderedRootDTO customerRootDTO = new CustomerOrderedRootDTO();
+
+        List<CustomerOrderedDTO> customersDTO = this.customerRepository.findAllOrderedByBirthDateAscAndYoungDriver()
+                .stream()
+                .map(c -> this.mapper.map(c, CustomerOrderedDTO.class))
+                .collect(Collectors.toList());
+
+        customerRootDTO.setCustomers(customersDTO);
+
+        return  customerRootDTO;
+    }
+
+    @Override
+    public void exportOrderedCustomers() {
+        this.xmlParser.toXML(getAllCustomersOrderedByBirthDate(), CUSTOMERS_ORDERED_XML_OUTPUT_PATH);
     }
 }
