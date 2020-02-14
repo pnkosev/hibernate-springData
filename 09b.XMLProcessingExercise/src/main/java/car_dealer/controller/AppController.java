@@ -39,7 +39,10 @@ public class AppController implements CommandLineRunner {
 //        this.exportCarsWithParts();
 
         // Query 5
-        this.exportCustomersWithPurchases();
+//        this.exportCustomersWithPurchases();
+
+        // Query 6
+//        this.exportSalesWithDetails();
 
         System.out.println("yoyo");
     }
@@ -75,4 +78,6 @@ public class AppController implements CommandLineRunner {
     private void exportCarsWithParts() { this.carService.exportCarsWithTheirParts(); }
 
     private void exportCustomersWithPurchases() { this.customerService.exportCustomersWithPurchases(); }
+
+    private void exportSalesWithDetails() { this.saleService.exportSalesWithDetails(); }
 }

@@ -1,9 +1,11 @@
 package car_dealer.service.api;
 
-import java.util.List;
+import car_dealer.domain.dto.exportDTO.SaleWithDiscountRootDTO;
 
 public interface SaleService {
     void seedMultipleSales();
 
-//    List<SaleDetailedViewDTO> getAllSalesWithDetails();
+    SaleWithDiscountRootDTO getAllSalesWithDetails();
+
+    void exportSalesWithDetails();
 }
